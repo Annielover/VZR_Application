@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using TweedeZit.Infrastructure;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.Controllers
+{
+    [Authorize]
+    public class ZwembadController : Controller
+    {
+
+        private String address1 = "";
+        private String address2 = "";
+        private IMedewerkerRepository _medewerkerRepository;
+
+        public ZwembadController(IMedewerkerRepository medewerkerRepository)
+        {
+            this._medewerkerRepository = medewerkerRepository;
+        }
+
+        public ActionResult Index([ModelBinder(typeof(MedewerkerModelBinder))] Medewerker medewerker)
+        {
+            return View(medewerker);
+        }
+
+        public void GetWeather(String postalCode)
+        {
+            if (String.IsNullOrEmpty(postalCode))
+                throw new ArgumentException("Argument \"postalCode\" cannot be null or empty.", "postalCode");
+
+            String json = WeatherServiceProvider.GetWeather(postalCode);
+
+            Response.Write(json);
+        }
+
+        [HttpPost]
+        public ActionResult Index([ModelBinder(typeof(MedewerkerModelBinder))] Medewerker medewerker, int[] vertrek, int[] aankomst)
+        {
+               
+            Zwembad zwembad1 = medewerker.GetZwembad(vertrek[0]);
+            Zwembad zwembad2 = medewerker.GetZwembad(aankomst[0]);
+
+            address1 = zwembad1.Straat + " " + zwembad1.Straatnummer + " " + zwembad1.Gemeente;
+            address2 = zwembad2.Straat + " " + zwembad2.Straatnummer + " " + zwembad2.Gemeente;
+
+
+
+            return RedirectToAction("RenderMapDirections", new { address_1 = address1, address_2 = address2 });
+        }
+
+        public ActionResult RenderMapDirections(String address_1, String address_2)
+        {
+            ViewData["address1"] = address_1;
+            ViewData["address2"] = address_2;
+
+            return View();
+        }
+
+    }
+}

@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Over ons";
+}
+
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+<p>&nbsp;</p>
+<h3>Werking van het VK</h3>
+<p>
+    In elke Vlaamse provincie en in het Brussels Hoofdstedelijk Gewest is er een <br/>
+    Vertrouwenscentrum Kindermishandeling (VK) werkzaam.
+</p>
+<p>
+    De oprichting van de Vertrouwenscentra kwam tot stand via een uitvoeringsbesluit van de Vlaamse <br/>
+    regering.
+</p>
+<p>
+    Ze worden gesubsidieerd via Kind en Gezin. Hieronder lichten we de opdrachten en de werking van <br/>
+    de VK’s verder toe.
+</p>
+<p>&nbsp;</p>
+<h3>Algemene werking</h3>
+<p>
+    Het VK is multidisciplinair samengesteld en heeft een medische, psychologisch/pedagogische en <br/>
+    sociale functie alsook een secretariaatsfunctie.
+</p>
+<p>
+    Elk VK is telefonisch bereikbaar tussen 9 en 17 uur. Tijdens de avonduren en in de weekends <br/>
+    is er voor dringende situaties een telefonische wachtdienst.
+</p>
+<p>
+    De hulpverlening van het VK is volledig gratis.
+</p>

@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Routeplanner";
+}
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
+
+<h4>Routeplanner</h4>
+
+
+<div style="width: 1100px;">
+     <div id="googleMap" style="width: 800px; height: 600px; float: left;"></div>
+     <div id="panel" style="width: 300px; height: 100%; float: right; overflow:auto;"></div> 
+</div>
+
+
+<p>&nbsp;</p>
+<h4>Live afbeelding van het zwembad</h4>
+<table>
+    <tr><th>Vertrek</th>
+        <th>Bestemming</th>
+    </tr>
+    <tr>
+        <td><div id="vertrek"></div></td>
+        <td><div id="aankomst"></div></td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+
+    <p>
+         <input type="button" class="btn btn-primary" id="cancelButton" value="Ga terug" />
+        <input type="button" class="btn btn-success" id="printbutton" value="Print kaart" onclick="Print();" />
+    </p>
+<script>
+    function Print() {
+        var content = window.document.getElementById("panel");
+        var newWindow = window.open(); // open a new window
+        newWindow.document.write(content.innerHTML);
+        newWindow.print(); // print the new window
+    }
+       
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var Orig_Loc = @Html.Raw(Json.Encode(ViewData["_address1"])); // Starting location 
+        var Dest_Loc = @Html.Raw(Json.Encode(ViewData["_address2"])); // Destination Location
+
+        $("#vertrek").html($("<img>").attr("src", "https://maps.googleapis.com/maps/api/streetview?size=350x300&location=" + Orig_Loc));
+        $("#aankomst").html($("<img>").attr("src", "https://maps.googleapis.com/maps/api/streetview?size=350x300&location=" + Dest_Loc));
+
+        $('#cancelButton').click(function () {
+            document.location = '@Url.Action("Index", "Zwembad")';
+        });
+
+
+
+        var map;
+        var directionsDisplay;
+        var directionsService = new google.maps.DirectionsService();
+
+        function initialize() {
+
+            var request = {
+                origin: Orig_Loc,
+                destination: Dest_Loc,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            };
+
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                }
+            });
+
+            var mapProp = {
+                center: new google.maps.LatLng(20.593684, 78.96288), //India Lat and Lon
+                zoom: 2,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            directionsDisplay = new google.maps.DirectionsRenderer({
+                suppressMarkers: false
+            });
+
+
+
+            directionsDisplay.setMap(map);
+            directionsDisplay.setPanel(document.getElementById('panel'));
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    });
+</script>
+    }

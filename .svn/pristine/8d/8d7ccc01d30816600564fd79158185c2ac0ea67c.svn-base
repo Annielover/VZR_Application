@@ -1,0 +1,135 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Web;
+
+namespace TweedeZit.Models.Domain
+{
+    public abstract class ServiceCache<TItem>
+    {
+        /// <summary>
+    /// Creates a new instance of this type. Defaults the cache lifetime to 10 minutes.
+    /// </summary>
+    protected ServiceCache()
+    {
+        this.CacheLifetime = new TimeSpan(0, 10, 0);
+    }
+
+    /// <summary>
+    /// Creates a new instance of this type. Defaults the cache lifetime to the specified 
+    /// <paramref name="cacheLifetime"/>.
+    /// </summary>
+    /// <param name="cacheLifetime">The length of time for which items in the cache should 
+    /// be considered valid. Afterwards, the items beyond this time span will be considered 
+    /// stale and removed from cache.</param>
+    protected ServiceCache(TimeSpan cacheLifetime)
+        : this()
+    {
+        this.CacheLifetime = cacheLifetime;
+    }
+
+
+    /// <summary>
+    /// Gets or sets the length of time the items in the cache are considered good. Will take 
+    /// affect the next time <see cref="GetResult"/> is called, which cleans up the cache.
+    /// </summary>
+    public TimeSpan CacheLifetime { get; set; }
+
+    /// <summary>
+    /// Gets an enumeration of the currect things in cache.
+    /// </summary>
+    public abstract IEnumerable<ServiceCacheItem<TItem>> CachedItems { get; }
+
+
+    /// <summary>
+    /// Gets an item from the cache. If it is not there, will execute <see cref="CacheMiss"/> 
+    /// delegate to retrieve the item, store it in cache - and return it.
+    /// </summary>
+    /// <param name="key">The key, or unique identifier of the item in cache.</param>
+    /// <returns>A populated object, either from cache - or from the underlying method specified 
+    /// by the <see cref="CacheMiss"/> delegate.</returns>
+    /// <exception cref="ArgumentException">When <paramref name="key"/> is null or empty.</exception>
+    public TItem GetResult(String key)
+    {
+        if (String.IsNullOrEmpty(key))
+            throw new ArgumentException("Argument \"key\" cannot be null or empty.", "key");
+
+        PruneCache();
+
+        ServiceCacheItem<TItem> cachedItem =
+            CachedItems.Where(item => item.Key.Equals(key, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+        return ProcessCacheSearchOutcome(key, cachedItem);
+    }
+
+    /// <summary>
+    /// Prunes away all stale items in cache. Automatically called with every call to <see cref="GetResult"/>.
+    /// </summary>
+    public virtual void PruneCache()
+    {
+        IEnumerable<ServiceCacheItem<TItem>> expiredItems = CachedItems.Where(item =>
+                            DateTime.Now.Subtract(item.TimeCaptured).TotalMinutes > CacheLifetime.TotalMinutes);
+
+        ServiceCacheItem<TItem>[] expiredItemsArray = expiredItems.ToArray();
+
+        for (int index = 0; index < expiredItemsArray.Length; index++)
+        {
+            Debug.WriteLine("Removing item from cache... " + expiredItemsArray[index].Key);
+            RemoveFromCache(expiredItemsArray[index]);
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the function pointer to use, if the item key is not found in the cache.
+    /// </summary>
+    public Func<String, ServiceCacheItem<TItem>> CacheMiss { get; set; }
+
+
+    /// <summary>
+    /// Abstract: In a derived class, adds an item to the cache store.
+    /// </summary>
+    /// <param name="item">The item to add to the store.</param>
+    public abstract void AddToCache(ServiceCacheItem<TItem> item);
+
+    /// <summary>
+    /// Abstract: In a derived class, removes an item from the cache store.
+    /// </summary>
+    /// <param name="item">The item to remove from the store.</param>
+    public abstract void RemoveFromCache(ServiceCacheItem<TItem> item);
+
+    /// <summary>
+    /// Abstract: In a derived class, removes all items from the cache.
+    /// </summary>
+    public abstract void ClearCache();
+
+    #region Private Support Members
+    
+    /// <summary>
+    /// Establish whether the <paramref name="cachedItem"/> we got from cache is valid or not.
+    /// </summary>
+    /// <exception cref="ArgumentException"/>
+    private TItem ProcessCacheSearchOutcome(String key, ServiceCacheItem<TItem> cachedItem)
+    {
+        if (String.IsNullOrEmpty(key))
+            throw new ArgumentException("Argument \"key\" cannot be null or empty.", "key");
+
+        if (cachedItem == null)
+        {
+            Debug.WriteLine("Item \"" + key + "\" NOT found in cache. Cache age is set to: " + CacheLifetime);
+            ServiceCacheItem<TItem> newItem = CacheMiss(key);
+            AddToCache(newItem);
+
+            return newItem.Value;
+        }
+        else
+        {
+            Debug.WriteLine("Item \"" + key + "\" found in cache - using it. " +
+                DateTime.Now.Subtract(cachedItem.TimeCaptured) + " minutes old.");
+            return cachedItem.Value;
+        }
+    }
+
+    #endregion
+}
+    }

@@ -1,0 +1,22 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace TweedeZit
+{
+    public class Opleidingsdag
+    {
+        #region Properties
+
+        public int OpleidingsdagId { get; set; }
+
+        [Required(ErrorMessage = "{0} mag niet leeg zijn")]
+        public string Naam { get; set; }
+
+        [Required(ErrorMessage = "{0} mag niet leeg zijn")]
+        [DataType(DataType.Date)]
+        [Display(Name = "Datum")]
+        public DateTime Date { get; set; }
+
+        #endregion
+    }
+}

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TweedeZit.Aanwezigheid>
+
+@{
+    ViewBag.Title = "Aanwezigheden";
+}
+
+<ul class="breadcrumb">
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+        <span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li>
+        <a href="@Url.Action("Index", "Aanwezigheid")">
+        <span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li>
+        <a href="@Url.Action("IndexZwemmers", "Aanwezigheid", new {id = @ViewData["leertraject"]})">
+        <span class="badge badge-warning">Overzicht zwemmers</span></a> <span class="divider">/</span></li>
+    <li class="active">Alle aanwezigheden</li>
+</ul>
+
+<h3>Overzicht aanwezigheden voor @ViewBag.MessageVoornaam @ViewBag.MessageNaam</h3>
+<p>(Gesorteerd op datum)</p>
+<p>&nbsp;</p>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <table class="table table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Dag.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aanwezig)?
+            </th>
+            <th>Like</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dag.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Aanwezig)
+                </td>
+                <td>
+                    @Facebook.LikeButton(href: "http://www.vzr.be?item.Dag.Date", showFaces: false)
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <p>&nbsp;</p>
+    <p>
+        <input class="btn btn-primary" type="submit" value="Verstuur e-mail met aanwezigheden"/>
+        <input type="button" class="btn" id="cancelButton" value="Ga terug"/>
+    </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#cancelButton').click(function() {
+                document.location = '@Url.Action("Index", "Aanwezigheid")';
+            });
+        });
+    </script>
+}

@@ -1,0 +1,15 @@
+﻿using System.Data.Entity.ModelConfiguration;
+
+
+namespace TweedeZit.Models.DAL.Mapper
+{
+    public class OpleidingsdagMapper : EntityTypeConfiguration<Opleidingsdag>
+    {
+        public OpleidingsdagMapper()
+        {
+            ToTable("Opleidingsdag"); 
+            Property(p => p.Date).IsRequired().HasColumnType("datetime2");
+            Property(p => p.Naam).IsRequired().HasMaxLength(50);
+        }
+    }
+}

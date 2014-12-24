@@ -1,0 +1,67 @@
+﻿@model IEnumerable<TweedeZit.Aanwezigheid>
+
+@{
+    ViewBag.Title = "Aanwezigheden";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Opleidingsdagen", "Aanwezigheid", new { id = @ViewData["leertraject"] })"><span class="badge badge-warning">Trainingsdagen</span></a> <span class="divider">/</span></li>
+    <li class="active">Wijzig aanwezigheden</li>
+</ul>
+
+<h3>Overzicht aanwezigheden op @ViewBag.Message van @ViewBag.MessageTraject</h3>
+<p>(Gesorteerd op achternaam van de cursist)</p>
+<p>&nbsp;</p>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true) 
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Cursist.Voornaam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cursist.Naam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Aanwezig)?
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cursist.Voornaam)
+        </td> 
+        <td>
+            @Html.DisplayFor(modelItem => item.Cursist.Naam)
+        </td> 
+        <td>
+            @Html.EditorFor(modelItem => item.Aanwezig)
+        </td>         
+    </tr>
+}
+
+</table>
+    <p>&nbsp;</p>
+    <p>
+        <input class="btn btn-primary" type="submit" value="Wijzigingen opslaan" />
+         <input type="button" class="btn" id="cancelButton" value="Annuleren" /> 
+    </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     <script type="text/javascript">
+         $(document).ready(function () {
+
+             $('#cancelButton').click(function () {
+                 document.location = '@Url.Action("Opleidingsdagen", "Aanwezigheid", new { id = @ViewData["leertraject"] })';
+            });
+        });
+    </script>
+}
+

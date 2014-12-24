@@ -1,0 +1,467 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Web.Mvc;
+using TweedeZit.Infrastructure;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.Controllers
+{
+    [Authorize]
+    public class AanwezigheidController : Controller
+    {
+        private readonly IMedewerkerRepository _medewerkerRepository;
+
+        public AanwezigheidController(IMedewerkerRepository medewerkerRepository)
+        {
+            _medewerkerRepository = medewerkerRepository;
+        }
+
+        #region Aanwezigheden Get
+
+        public ActionResult Aanwezigheden(Medewerker medewerker, int leertrajectId, int dagId)
+        {
+            var dag = medewerker.GetLeertraject(leertrajectId).GetDag(dagId);
+            ViewBag.Message = dag.Date.Date.DayOfWeek + " " + dag.Date.Date.Day + "/" + dag.Date.Date.Month + "/" +
+                              dag.Date.Date.Year;
+            ViewBag.MessageTraject = medewerker.GetLeertraject(leertrajectId).Titel.ToLower();
+            ViewData["leertraject"] = leertrajectId;
+            return View(medewerker.GetLeertraject(leertrajectId).GetAanwezigheidslijst(dag));
+        }
+
+        #endregion
+
+        #region Aanwezigheden Post
+
+        [HttpPost]
+        public ActionResult Aanwezigheden(Medewerker medewerker, int leertrajectId, int dagId, FormCollection formValues)
+        {
+            var dag = medewerker.GetLeertraject(leertrajectId).GetDag(dagId);
+            var aanwezigheden = medewerker.GetLeertraject(leertrajectId)
+                .GetAanwezigheidslijst(dag);
+
+            ViewBag.Message = dag.Date.Date.DayOfWeek + " " + dag.Date.Date.Day + "/" + dag.Date.Date.Month + "/" +
+                              dag.Date.Date.Year;
+            ViewBag.MessageTraject = medewerker.GetLeertraject(leertrajectId).Titel.ToLower();
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (!string.IsNullOrEmpty(formValues["item.Aanwezig"]))
+                    {
+                        var temp = formValues["item.Aanwezig"].Split(',');
+                        var i = 0;
+                        foreach (var a in aanwezigheden)
+                        {
+                            if (temp[i].ToLower() == "true" && temp[i + 1].ToLower() == "false")
+                            {
+                                medewerker.GetLeertraject(leertrajectId).SetAanwezig(a.Cursist, a.Dag);
+                                i += 2;
+                            }
+                            else
+                            {
+                                medewerker.GetLeertraject(leertrajectId).SetAfwezig(a.Cursist, a.Dag);
+                                i++;
+                            }
+                        }
+                    }
+                    _medewerkerRepository.SaveChanges();
+
+                    TempData["Msg"] = "Wijzigingen succesvol opgeslagen!";
+
+                    return RedirectToAction("Opleidingsdagen", new {id = leertrajectId});
+                }
+                return View(medewerker.GetLeertraject(leertrajectId).GetAanwezigheidslijst(dag));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+
+                return View(medewerker.GetLeertraject(leertrajectId).GetAanwezigheidslijst(dag));
+            }
+        }
+
+        #endregion
+
+        #region Leertrajecten
+
+        public ActionResult Index([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker)
+        {
+            var numberOfTrajecten = medewerker.GetAllLeertrajecten().Count();
+
+            if (numberOfTrajecten == 0)
+            {
+                return View("NoLeertrajecten");
+            }
+
+            var cursisten = medewerker.GetAllCursisten();
+            ICollection<string> mededelingen = new List<string>();
+            ICollection<string> warnings = new List<string>();
+
+            foreach (var cursist in cursisten)
+            {
+                if (DateTime.Now > cursist.Abonnement.Date.AddMonths(-1) && !(DateTime.Now > cursist.Abonnement.Date))
+                {
+                    warnings.Add("Het abonnement van " + cursist.Voornaam + " " + cursist.Naam + " verloopt binnenkort.");
+                }
+                else if (DateTime.Now > cursist.Abonnement.Date)
+                {
+                    mededelingen.Add("Het abonnement van " + cursist.Voornaam + " " + cursist.Naam + " is vervallen!");
+                }
+            }
+
+            if (warnings.Count() == 0)
+            {
+                warnings.Add("Geen items");
+            }
+
+            if (mededelingen.Count() == 0)
+            {
+                mededelingen.Add("Geen items");
+            }
+
+            ViewData["mededelingen"] = mededelingen;
+            ViewData["warnings"] = warnings;
+            return View(medewerker.GetAllLeertrajecten());
+        }
+
+
+        public ActionResult SearchZwemgroep([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            string value)
+        {
+            var resultaten = medewerker.GetLeertrajectFromName(value);
+            return View(resultaten);
+        }
+
+        public ActionResult Create()
+        {
+            return View(new Leertraject());
+        }
+
+        [HttpPost]
+        public ActionResult Create([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            Leertraject leertraject)
+        {
+            if (ModelState.IsValid)
+            {
+                medewerker.Leertrajecten.Add(leertraject);
+                _medewerkerRepository.SaveChanges();
+                TempData["Msg"] = "Trainingsgroep succesvol aangemaakt!";
+                return RedirectToAction("Index");
+            }
+            return View(leertraject);
+        }
+
+        public ActionResult Edit([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker, int id)
+        {
+            ViewBag.Message = medewerker.GetLeertraject(id).Titel.ToLower();
+            return View("Edit", medewerker.GetLeertraject(id));
+        }
+
+        [HttpPost]
+        public ActionResult Edit([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker, int id,
+            FormCollection formValues)
+        {
+            ViewBag.Message = medewerker.GetLeertraject(id).Titel.ToLower();
+            var leertraject = medewerker.GetLeertraject(id);
+            if (leertraject == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (TryUpdateModel(leertraject, formValues.ToValueProvider()))
+            {
+                _medewerkerRepository.SaveChanges();
+                TempData["Msg"] = "Trainingsgroep succesvol gewijzigd!";
+                return RedirectToAction("Index");
+            }
+            return View("EditLeertraject", leertraject);
+        }
+
+        #endregion
+
+        #region Cursisten
+
+        public ActionResult IndexZwemmers([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker, int id)
+        {
+            ViewBag.Message = medewerker.GetLeertraject(id).Titel.ToLower();
+            return View(medewerker.GetLeertraject(id));
+        }
+
+        public ActionResult CreateCursist([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId)
+        {
+            ViewBag.Message = medewerker.GetLeertraject(leertrajectId).Titel.ToLower();
+            ViewData["leertraject"] = leertrajectId;
+            return View(new Cursist());
+        }
+
+        [HttpPost]
+        public ActionResult CreateCursist([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId, Cursist cursist)
+        {
+            if (ModelState.IsValid)
+            {
+                medewerker.GetLeertraject(leertrajectId).Add(cursist);
+                _medewerkerRepository.SaveChanges();
+                TempData["Msg"] = "Zwemmer succesvol aangemaakt!";
+                return RedirectToAction("IndexZwemmers", new {id = leertrajectId});
+            }
+            ViewBag.Message = medewerker.GetLeertraject(leertrajectId).Titel.ToLower();
+            return View(cursist);
+        }
+
+        public ActionResult EditCursist([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int cursistId)
+        {
+            var cursist = medewerker.GetCursist(cursistId);
+            ViewBag.Message = cursist.Voornaam + " " + cursist.Naam;
+            return View("EditCursist", cursist);
+        }
+
+        [HttpPost]
+        public ActionResult EditCursist([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int cursistId, FormCollection formValues)
+        {
+            var cursist = medewerker.GetCursist(cursistId);
+            if (cursist == null)
+            {
+                return RedirectToAction("IndexAllCursisten");
+            }
+            if (TryUpdateModel(cursist, formValues.ToValueProvider()))
+            {
+                _medewerkerRepository.SaveChanges();
+                TempData["Msg"] = "Gegevens van zwemmer succesvol gewijzigd!";
+                return RedirectToAction("IndexAllCursisten");
+            }
+            return View("EditCursist", cursist);
+        }
+
+        public ActionResult DeleteCursist([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int cursistId)
+        {
+            var cursist = medewerker.GetCursist(cursistId);
+            return View(cursist);
+        }
+
+        [HttpPost, ActionName("DeleteCursist")]
+        public ActionResult DeleteCursistConfirmed([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int cursistId)
+        {
+            var cursist = medewerker.GetCursist(cursistId);
+            if (cursist == null)
+            {
+                return RedirectToAction("IndexAllCursisten");
+            }
+            try
+            {
+                var leertrajectId = medewerker.GetLeertrajectIdFromCursist(cursistId);
+                medewerker.GetLeertraject(leertrajectId).Remove(cursist);
+                _medewerkerRepository.SaveChanges();
+                TempData["Msg"] = "Zwemmer succesvol verwijderd!";
+                return RedirectToAction("IndexAllCursisten");
+            }
+            catch (Exception ex)
+            {
+                TempData["Msg"] = "ERROR: " + ex.Message;
+                return RedirectToAction("IndexAllCursisten");
+            }
+        }
+
+        #endregion
+
+        #region Aanwezigheden van één cursist
+
+        public ActionResult ListAanwezigheden([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId, int cursistId)
+        {
+            var cursist = medewerker.GetLeertraject(leertrajectId).GetCursist(cursistId);
+            ViewBag.MessageNaam = cursist.Naam;
+            ViewBag.MessageVoornaam = cursist.Voornaam;
+            ViewData["leertraject"] = leertrajectId;
+            return View(medewerker.GetLeertraject(leertrajectId).GetAanwezigheidslijst(cursist));
+        }
+
+        [HttpPost]
+        public ActionResult ListAanwezigheden([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId, int cursistId, Aanwezigheid aanwezigheid)
+        {
+            try
+            {
+                var zwemmer = medewerker.GetCursist(cursistId);
+                var aanwezigheidslijst =
+                    medewerker.GetLeertraject(leertrajectId).GetAanwezigheidslijst(zwemmer);
+
+                var mail = new MailMessage();
+
+                var smtpServer = new SmtpClient("smtp.gmail.com");
+                smtpServer.Credentials = new NetworkCredential("aanwezighedenvzr@gmail.com", "abcde12345AZ");
+                smtpServer.EnableSsl = true;
+                smtpServer.Port = 587;
+
+                mail.From = new MailAddress("VZRafwezigheden@vzr.be");
+                mail.To.Add(medewerker.Email);
+                mail.Subject = "Aanwezigheden van " + zwemmer.Voornaam + " " + zwemmer.Naam;
+
+                foreach (var a in aanwezigheidslijst)
+                {
+                    var nederlands = a.Aanwezig.ToString();
+                    if (nederlands == "False")
+                    {
+                        nederlands = "Afwezig";
+                    }
+                    else
+                    {
+                        nederlands = "Aanwezig";
+                    }
+
+                    mail.Body += " " + a.Dag.Naam + " " + a.Dag.Date.Day + "/" + a.Dag.Date.Month + "/" +
+                                 a.Dag.Date.Year + ": " + nederlands + ".\n";
+                }
+
+                smtpServer.Send(mail);
+
+                TempData["Msg"] = "De E-mail is succesvol verstuurd.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["Msg"] = "ERROR: " + ex.Message;
+                return RedirectToAction("Index");
+            }
+        }
+
+        #endregion
+
+        #region Opleidingsdagen
+
+        public ActionResult Opleidingsdagen(Medewerker medewerker, int id)
+        {
+            ViewBag.Message = medewerker.GetLeertraject(id).Titel.ToLower();
+            var numberofDays = medewerker.GetLeertraject(id).GetOpleidingsdagen().Count();
+
+            if (numberofDays == 0)
+            {
+                return View("NoOpleidingsdagen", medewerker.GetLeertraject(id));
+            }
+            return View(medewerker.GetLeertraject(id));
+        }
+
+        public ActionResult CreateOpleidingsdag([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId)
+        {
+            ViewBag.Message = medewerker.GetLeertraject(leertrajectId).Titel.ToLower();
+            ViewData["leertraject"] = leertrajectId;
+            return View(new Opleidingsdag());
+        }
+
+        [HttpPost]
+        public ActionResult CreateOpleidingsdag([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId, Opleidingsdag opleidingsdag)
+        {
+            medewerker.GetLeertraject(leertrajectId).Add(opleidingsdag);
+            _medewerkerRepository.SaveChanges();
+            TempData["Msg"] = "Trainingsdag succesvol aangemaakt!";
+            return RedirectToAction("Opleidingsdagen", new {id = leertrajectId});
+        }
+
+        public ActionResult EditOpleidingsdag([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId, int dagId)
+        {
+            var dag = medewerker.GetLeertraject(leertrajectId).GetDag(dagId);
+            ViewData["leertraject"] = leertrajectId;
+            ViewBag.Message = dag.Naam.ToLower();
+            return View("EditOpleidingsdag", dag);
+        }
+
+        [HttpPost]
+        public ActionResult EditOpleidingsdag([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            int leertrajectId, int dagId, FormCollection formValues)
+        {
+            var dag = medewerker.GetLeertraject(leertrajectId).GetDag(dagId);
+            ViewBag.Message = dag.Naam.ToLower();
+
+            if (TryUpdateModel(dag, formValues.ToValueProvider()))
+            {
+                _medewerkerRepository.SaveChanges();
+                TempData["Msg"] = "Trainingsdag succesvol gewijzigd!";
+                return RedirectToAction("Opleidingsdagen", new {id = leertrajectId});
+            }
+            return View("EditOpleidingsdag", dag);
+        }
+
+        #endregion
+
+        #region Alle cursisten en hun gegevens en hun leertraject wijzigen
+
+        public PartialViewResult SearchPeople([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            string value)
+        {
+            var data = medewerker.GetCursistenByName(value);
+            return PartialView(data);
+        }
+
+        public ActionResult IndexAllCursisten([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker)
+        {
+            return View(medewerker);
+        }
+
+        [HttpPost]
+        public ActionResult IndexAllCursisten([ModelBinder(typeof (MedewerkerModelBinder))] Medewerker medewerker,
+            FormCollection formValues)
+        {
+            string[] leertrajecten;
+            string[] cursisten;
+            var aantal = 0;
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    leertrajecten = formValues["Leertraject"].Split(',');
+
+                    cursisten = formValues["item.CursistId"].Split(',');
+
+                    for (var teller = 0; teller < leertrajecten.Length; teller++)
+                    {
+                        if (leertrajecten[teller] != "")
+                        {
+                            aantal++;
+                            int cursistId = Convert.ToInt16(cursisten[teller]);
+                            int leertrajectId = Convert.ToInt16(leertrajecten[teller]);
+
+                            var cursist = medewerker.GetCursist(cursistId);
+                            var previousLeertrajectId = medewerker.GetLeertrajectIdFromCursist(cursistId);
+                            medewerker.GetLeertraject(previousLeertrajectId).Remove(cursist);
+                            medewerker.GetLeertraject(leertrajectId).Add(cursist);
+                        }
+                    }
+
+                    _medewerkerRepository.SaveChanges();
+
+                    if (aantal > 1)
+                    {
+                        TempData["Msg"] = "Zwemmers succesvol van groep veranderd!";
+                    }
+                    else
+                    {
+                        TempData["Msg"] = "Zwemmer succesvol van groep veranderd!";
+                    }
+
+                    return RedirectToAction("IndexAllCursisten");
+                }
+                return View(medewerker);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(medewerker);
+            }
+        }
+
+        #endregion
+    }
+}

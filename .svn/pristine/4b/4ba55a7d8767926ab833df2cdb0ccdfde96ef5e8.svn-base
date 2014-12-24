@@ -1,0 +1,106 @@
+﻿@model TweedeZit.Medewerker
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+@{
+    ViewBag.Title = "Beheer leden";
+}
+
+<ul class="breadcrumb">
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+        <span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li>
+        <a href="@Url.Action("Index", "Aanwezigheid")">
+        <span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li class="active">Beheer leden</li>
+</ul>
+
+<h2>Beheerspagina leden</h2>
+<h3>Overzicht alle leden van VZR</h3>
+<p>(Gesorteerd op familienaam)</p>
+<p>&nbsp;</p>
+
+
+<p>
+    @using (Ajax.BeginForm("SearchPeople", "Aanwezigheid",
+        new AjaxOptions
+        {
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "searchResult"
+        }))
+    {
+        @Html.TextBox("value")
+        <input type="submit" class="btn btn-primary" value="Zoek"/>
+    }
+</p>
+
+<div id="searchResult">
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GetAllCursisten().FirstOrDefault().Voornaam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GetAllCursisten().FirstOrDefault().Naam)
+                </th>
+                <th>
+                    Zwemgroep
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.GetAllCursisten())
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Voornaam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Naam)
+                    </td>
+                    <td>
+                        @Html.DropDownList("Leertraject", Model.GetAllLeertrajectenSelectList(), Model.GetLeertrajectFromCursist(item.CursistId).Titel)
+                        @Html.HiddenFor(modelItem => item.CursistId)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("EditCursist", new {cursistId = item.CursistId})">
+                            <span class="badge badge-info">Details & wijzig gegevens</span></a>
+                        <a href="@Url.Action("DeleteCursist", new {cursistId = item.CursistId})">
+                            <span class="badge badge-info">Verwijder lid</span></a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <p>&nbsp;</p>
+        <p>
+            <input class="btn btn-primary" type="submit" value="Wijzigingen opslaan"/>
+            <input type="button" class="btn" id="cancelButton" value="Annuleren"/>
+        </p>
+    }
+
+
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#cancelButton').click(function() {
+                document.location = '@Url.Action("Index", "Aanwezigheid")';
+            });
+        });
+    </script>
+}

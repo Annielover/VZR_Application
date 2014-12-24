@@ -1,0 +1,6 @@
+﻿@{
+    ViewBag.Title = "GetErrorPageJavascriptDisabled";
+}
+
+<h2>GetErrorPageJavascriptDisabled</h2>
+Sorry, your browser doesn't support javascript. The content of this page can't be shown.

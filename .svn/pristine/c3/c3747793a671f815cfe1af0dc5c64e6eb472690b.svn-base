@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Help | Dag toevoegen";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li class="active">Help - Trainingsdag toevoegen</li>
+    </ul>
+
+<h4>Hoe een trainingsdag toevoegen?</h4>
+
+<p>De aanwezigheden worden per groep en per dag bijgehouden. Met andere woorden: <strong>als je een trainingsdag toevoegt, moet dit per groep gebeuren.</strong><br />
+    Dit is zo gemaakt omdat niet alle groepen elke training trainen.
+</p>
+<p>Om een trainingsdag toe te voegen, ga je als volgt te werk:</p>
+<p>Kies een bestaande zwemgroep en klik op <strong>Toon trainingsdagen</strong>.</p>
+<p><img src="~/Images/Help/Opleidingsdag_2.png" alt="Trainingsdag toevoegen"/></p>
+<p>&nbsp;</p>
+<hr />
+<p>Vervolgens zie je een lijst van alle traininsdagen voor de desbetreffende groep. Klik op <strong>Maak een nieuwe dag aan</strong>.</p>
+<p>&nbsp;</p>
+<p><img src="~/Images/Help/Opleidingsdag_3.png"/></p>
+<p>&nbsp;</p>
+<hr />
+<p>Je komt in het volgende scherm terecht waar je de gegevens moet invullen. <strong>Gelieve alle velden in te vullen!</strong><br />
+    Klik vervolgens op <strong>Aanmaken</strong>.
+</p>
+<p>&nbsp;</p>
+<p><img src="~/Images/Help/Opleidingsdag_4.png"/></p>
+<p>&nbsp;</p>
+<hr />
+<p>Je krijgt een bevestigingsmelding:</p>
+<p><img src="~/Images/Help/Opleidingsdag_5.png"/></p>

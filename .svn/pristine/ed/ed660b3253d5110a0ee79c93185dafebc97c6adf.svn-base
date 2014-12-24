@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration;
+using System.Linq;
+using System.Web;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.Models.DAL.Mapper
+{
+    public class ZwembadMapper : EntityTypeConfiguration<Zwembad>
+    {
+        public ZwembadMapper()
+        {
+            ToTable("Zwembad");
+            Property(p => p.Naam).IsRequired();
+            Property(p => p.Straat).IsRequired();
+            Property(p => p.Straatnummer).IsRequired();
+            Property(p => p.Postcode).IsRequired();
+            Property(p => p.Gemeente).IsRequired();
+        }
+
+    }
+}

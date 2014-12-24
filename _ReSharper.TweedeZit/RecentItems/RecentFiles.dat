@@ -1,0 +1,38 @@
+﻿<RecentFiles>
+  <RecentFiles>
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/f:Bootstrapper.cs" caret="441" fromTop="16" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Cursist.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Leertraject.cs" caret="1902" fromTop="27" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Medewerker.cs" caret="1075" fromTop="35" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Opleidingsdag.cs" caret="392" fromTop="15" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:DAL/f:AanwezigheidsInitializer.cs" caret="1310" fromTop="24" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/f:Global.asax.cs" caret="1097" fromTop="29" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:IMedewerkerRepository.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Controllers/f:AanwezigheidController.cs" caret="1527" fromTop="27" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:DAL/f:MedewerkerRepository.cs" caret="522" fromTop="18" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:DAL/f:AanwezigheidsContext.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Infrastructure/f:MedewerkerModelBinder.cs" caret="781" fromTop="19" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/f:NinjectControllerFactory.cs" caret="0" fromTop="0" />
+    <File id="E74C2F6C-D4D7-4E7C-AFAE-965927751C0D/f:Bootstrapper.cs" caret="0" fromTop="0" />
+    <File id="E74C2F6C-D4D7-4E7C-AFAE-965927751C0D/d:Controllers/f:HomeControllerTest.cs" caret="1274" fromTop="48" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/f:AccountModels.cs" caret="592" fromTop="11" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:App_Start/f:BundleConfig.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Controllers/f:AccountController.cs" caret="897" fromTop="5" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:App_Start/f:FilterConfig.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:App_Start/f:NinjectWebCommon.cs" caret="510" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:App_Start/f:AuthConfig.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:App_Start/f:RouteConfig.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:App_Start/f:WebApiConfig.cs" caret="0" fromTop="0" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Controllers/f:HomeController.cs" caret="201" fromTop="9" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Aanwezigheid.cs" caret="390" fromTop="18" />
+  </RecentFiles>
+  <RecentEdits>
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Controllers/f:AanwezigheidController.cs" caret="590" fromTop="20" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Opleidingsdag.cs" caret="392" fromTop="15" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Medewerker.cs" caret="930" fromTop="32" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Infrastructure/f:MedewerkerModelBinder.cs" caret="781" fromTop="19" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Leertraject.cs" caret="2424" fromTop="33" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:DAL/f:AanwezigheidsInitializer.cs" caret="837" fromTop="18" />
+    <File id="942675BF-D9FD-4FA4-97FC-E291527D7BF1/d:Models/d:Domain/f:Aanwezigheid.cs" caret="550" fromTop="24" />
+  </RecentEdits>
+</RecentFiles>

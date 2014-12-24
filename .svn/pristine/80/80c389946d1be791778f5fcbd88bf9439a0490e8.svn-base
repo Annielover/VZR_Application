@@ -1,0 +1,24 @@
+﻿namespace TweedeZit
+{
+    public class Aanwezigheid
+    {
+        public Aanwezigheid()
+        {
+        }
+
+        public Aanwezigheid(Cursist cursist, Opleidingsdag dag)
+        {
+            Cursist = cursist;
+            Dag = dag;
+        }
+
+        #region properties
+
+        public int AanwezigheidId { get; set; }
+        public virtual Cursist Cursist { get; set; }
+        public virtual Opleidingsdag Dag { get; set; }
+        public bool Aanwezig { get; set; }
+
+        #endregion
+    }
+}

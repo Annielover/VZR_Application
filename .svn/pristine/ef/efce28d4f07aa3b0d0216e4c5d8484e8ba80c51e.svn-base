@@ -1,0 +1,126 @@
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using TweedeZit.Infrastructure;
+using TweedeZit.Models.Domain;
+using System.ComponentModel.DataAnnotations;
+
+namespace TweedeZit
+{
+    [ModelBinder(typeof(MedewerkerModelBinder))]
+    public class Medewerker
+    {
+        public int MedewerkerId { get; set; }
+        public string Email { get; set; }
+        public string Naam { get; set; } 
+        public string Voornaam { get; set; }
+
+        public virtual ICollection<Leertraject> Leertrajecten { get; set; }
+        public virtual ICollection<TellingDag> TellingDagen { get; set; }
+        public virtual ICollection<Zwembad> Zwembaden { get; set; }
+
+        public Medewerker()
+        {
+            Leertrajecten = new List<Leertraject>();
+            TellingDagen = new List<TellingDag>();
+            Zwembaden = new List<Zwembad>();
+        }
+
+        public IEnumerable<Leertraject> GetAllLeertrajecten()
+        {
+            return Leertrajecten.OrderBy(l => l.Titel).Select(l => l);            
+        }
+
+        public SelectList GetAllLeertrajectenSelectList()
+        {
+            return new SelectList(GetAllLeertrajecten(), "LeertrajectId", "Titel");
+        }
+
+        public Leertraject GetLeertraject(int leertrajectId)
+        {          
+            return Leertrajecten.FirstOrDefault(l => l.LeertrajectId == leertrajectId);
+        }
+
+        public IEnumerable<Cursist> GetAllCursisten()
+        {
+            ICollection<Cursist> Cursisten = new List<Cursist>();
+
+            foreach (Leertraject leertraject in Leertrajecten)
+            {
+                foreach (Cursist cursist in leertraject.Cursisten)
+                {
+                    Cursisten.Add(cursist);
+                }
+            }
+            return Cursisten.OrderBy(c => c.Naam).ThenBy(c => c.Voornaam).Select(c => c);
+        }
+
+        public Cursist GetCursist(int cursistId)
+        {
+            return GetAllCursisten().Where(c => c.CursistId == cursistId).FirstOrDefault();
+        }
+
+        public IEnumerable<Cursist> GetCursistenByName(string naam)
+        {
+            return GetAllCursisten().Where (c => c.Naam.ToLower().Contains(naam.ToLower()) || c.Voornaam.ToLower().Contains(naam.ToLower())).OrderBy(c => c.Naam).Select(c => c);
+        }
+
+        public IEnumerable<Leertraject> GetLeertrajectFromName(string name)
+        {
+            return GetAllLeertrajecten().Where(l => l.Titel.StartsWith(name)).Select(l => l);
+        }
+
+        public int GetLeertrajectIdFromCursist(int cursistId)
+        {
+            int id = 0;
+            foreach (Leertraject leertraject in Leertrajecten)
+            {
+                foreach (Cursist cursist in leertraject.Cursisten)
+                {
+                    if (cursist.CursistId == cursistId)
+                    {
+                        id = leertraject.LeertrajectId;
+                    }
+                }
+            }
+            return id;
+        }
+
+        public Leertraject GetLeertrajectFromCursist(int cursistId)
+        {
+            Leertraject traject = new Leertraject();
+
+            foreach (Leertraject leertraject in Leertrajecten)
+            {
+                foreach (Cursist cursist in leertraject.Cursisten)
+                {
+                    if (cursist.CursistId == cursistId)
+                    {
+                        traject = GetLeertraject(leertraject.LeertrajectId);
+                    }
+                }
+            }
+            return traject;
+        }
+
+        public IEnumerable<TellingDag> GetTellingDagen()
+        {
+            return TellingDagen.OrderBy(t => t.Datum).Select(t => t);
+        }
+
+        public TellingDag GetTellingDag(int tellingdagId)
+        {
+            return TellingDagen.FirstOrDefault(t => t.TellingDagId == tellingdagId);
+        }
+
+        public IEnumerable<Zwembad> GetZwembaden()
+        {
+            return Zwembaden.OrderBy(z => z.Naam).Select(z => z);
+        }
+
+        public Zwembad GetZwembad(int zwembadId)
+        {
+            return Zwembaden.FirstOrDefault(z => z.ZwembadId == zwembadId);
+        }
+    }
+}

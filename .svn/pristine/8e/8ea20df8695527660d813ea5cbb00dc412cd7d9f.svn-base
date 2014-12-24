@@ -1,0 +1,175 @@
+﻿@model TweedeZit.Cursist
+
+@{
+    ViewBag.Title = "Wijzig lid";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("IndexAllCursisten", "Aanwezigheid")"><span class="badge badge-warning">Beheer leden</span></a> <span class="divider">/</span></li>
+    <li class="active">Wijzig lid</li>
+</ul>
+
+<h3>Details voor @ViewBag.Message:</h3>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Gegevens van lid</legend>
+
+        @Html.HiddenFor(model => model.CursistId)
+
+        <table>
+            <tr>
+                <td>
+                    <div class="editor-label">
+                     @Html.LabelFor(model => model.Voornaam)
+                    </div>
+                    <div class="editor-field">
+                     @Html.EditorFor(model => model.Voornaam)
+                     @Html.ValidationMessageFor(model => model.Voornaam)
+                   </div>
+                </td>
+                <td>
+                    <div class="editor-label">
+                    @Html.LabelFor(model => model.Naam)
+                    </div>
+                     <div class="editor-field">
+                    @Html.EditorFor(model => model.Naam)
+                    @Html.ValidationMessageFor(model => model.Naam)
+                    </div>
+                </td>
+                 <td><div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                    </div>
+                    <div class="editor-field">
+                    @Html.EditorFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </td>
+            </tr>
+            <tr>  
+                <td>
+                     <div class="editor-label">
+                    @Html.LabelFor(model => model.Straat)
+                    </div>
+                    <div class="editor-field">
+                    @Html.EditorFor(model => model.Straat)
+                    @Html.ValidationMessageFor(model => model.Straat)
+                    </div>
+                </td>
+                <td>
+                     <div class="editor-label">
+                    @Html.LabelFor(model => model.Straatnummer)
+                    </div>
+                     <div class="editor-field">
+                    @Html.EditorFor(model => model.Straatnummer)
+                    @Html.ValidationMessageFor(model => model.Straatnummer)
+                    </div>
+                </td>
+            </tr>
+           <tr style="border-bottom: 1px solid #BBBBBB;">
+                <td> 
+                    <div class="editor-label">
+                    @Html.LabelFor(model => model.Postcode)
+                    </div>
+                    <div class="editor-field">
+                    @Html.EditorFor(model => model.Postcode)
+                    @Html.ValidationMessageFor(model => model.Postcode)
+                    </div>
+                </td>
+                <td>
+                    <div class="editor-label">
+                    @Html.LabelFor(model => model.Gemeente)
+                    </div>
+                    <div class="editor-field">
+                    @Html.EditorFor(model => model.Gemeente)
+                    @Html.ValidationMessageFor(model => model.Gemeente)
+                </div>
+                </td>
+            </tr>
+        </table>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Telefoon)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Telefoon)
+            @Html.ValidationMessageFor(model => model.Telefoon)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Abonnement)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Abonnement, "{0:dd/MM/yyyy}", new { id = "date" })
+            @Html.ValidationMessageFor(model => model.Abonnement)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Geboortedatum)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Geboortedatum, "{0:dd/MM/yyyy}", new { id = "date2" })
+            @Html.ValidationMessageFor(model => model.Geboortedatum)
+        </div>
+
+        @if(Model.NaamMama != "") {
+             <div class="editor-label">
+            @Html.LabelFor(model => model.NaamMama)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.NaamMama)
+            @Html.ValidationMessageFor(model => model.NaamMama)
+        </div>
+        }
+
+         @if (Model.NaamPapa != "")
+         {
+             <div class="editor-label">
+            @Html.LabelFor(model => model.NaamPapa)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.NaamPapa)
+            @Html.ValidationMessageFor(model => model.NaamPapa)
+        </div>
+         }
+
+        <p>&nbsp;</p>
+        <p>
+            <input type="submit" class="btn btn-primary" value="Wijzigingen opslaan" />
+             <input type="button" class="btn" id="cancelButton" value="Annuleren" />
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/datepicker.css" rel="stylesheet" />
+
+    <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript" ></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#date").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd/mm/yyyy',
+                weekStart: 1
+            });
+
+            $("#date2").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd/mm/yyyy',
+                weekStart: 1
+            });
+
+             $('#cancelButton').click(function () {
+                 document.location = '@Url.Action("IndexAllCursisten", "Aanwezigheid")';
+            });
+        });
+    </script>
+}

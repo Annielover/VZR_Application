@@ -1,0 +1,70 @@
+﻿@model TweedeZit.TellingDag
+
+@{
+    ViewBag.Title = "Nieuwe dag aanmaken";
+}
+
+<ul class="breadcrumb">
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+        <span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li>
+        <a href="@Url.Action("Index", "Telling")">
+        <span class="badge badge-warning">Beheerspagina tellingen</span></a> <span class="divider">/</span></li>
+    <li class="active">Dag aanmaken</li>
+</ul>
+
+<h3>Maak nieuwe dag aan</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>TellingDag</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Naam)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Naam)
+            @Html.ValidationMessageFor(model => model.Naam)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Datum)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Datum, DateTime.Now.ToString("dd/MM/yyyy"), new {id = "date"})
+            @Html.ValidationMessageFor(model => model.Datum)
+        </div>
+
+        <p>
+            <input type="submit" value="Aanmaken" class="btn btn-primary"/>
+            <input type="button" class="btn" id="cancelButton" value="Annuleren"/>
+        </p>
+    </fieldset>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/datepicker.css" rel="stylesheet"/>
+
+    <script src="~/Scripts/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#date").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd/mm/yyyy',
+                weekStart: 1
+            });
+
+            $('#cancelButton').click(function() {
+                document.location = '@Url.Action("Index", "Telling")';
+            });
+        });
+    </script>
+}

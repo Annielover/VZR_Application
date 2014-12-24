@@ -1,0 +1,54 @@
+﻿@model TweedeZit.Models.Domain.Leertraject
+
+@{
+    ViewBag.Title = "Nieuwe trainingsgroep";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li class="active">Nieuwe trainingsgroep</li>
+</ul>
+
+<h3>Nieuwe trainingsgroep aanmaken</h3>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Trainingsgroep</legend>
+
+        <div class="editor-label">
+            Naam
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Titel)
+            @Html.ValidationMessageFor(model => model.Titel)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Omschrijving)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Omschrijving)
+            @Html.ValidationMessageFor(model => model.Omschrijving)
+        </div>
+        <p>&nbsp;</p>
+        <p>
+            <input type="submit" value="Aanmaken" class="btn btn-primary"/>
+            <input type="button" class="btn" id="cancelButton" value="Annuleren" />
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+         $(document).ready(function () {
+
+             $('#cancelButton').click(function () {
+                 document.location = '@Url.Action("Index", "Aanwezigheid")';
+            });
+        });
+    </script>
+}

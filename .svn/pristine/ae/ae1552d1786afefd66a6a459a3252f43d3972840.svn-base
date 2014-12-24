@@ -1,0 +1,166 @@
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using TweedeZit.Infrastructure;
+using TweedeZit.Models.Domain;
+using System.ComponentModel.DataAnnotations;
+
+namespace TweedeZit
+{
+    // -------------------------------------
+    // MEDEWERKER = USER OF THE APPLICATION
+    // -------------------------------------
+
+    // We make use of modelbinding. The medewerker is the starting point of the application.
+    // See the classes "MedewerkerModelBinder" and "MedewerkerRepository" for more details concerning the database and modelbinding.
+
+    [ModelBinder(typeof (MedewerkerModelBinder))]
+    public class Medewerker
+    {
+        // properties of the medewerker: id, email, naam and voornaam (first name).
+        #region Properties
+
+        public int MedewerkerId { get; set; }
+        public string Email { get; set; }
+        public string Naam { get; set; }
+        public string Voornaam { get; set; }
+
+        // a medewerker contains a list of leertrajecten (swimming groups), tellingdagen and zwembaden (swimming pools)
+        // a TellingDag is pretty much the same as a swimming day, but a telling day is used for administration purposes. It counts the number of swimmers for a specific hour.
+        public virtual ICollection<Leertraject> Leertrajecten { get; set; }
+        public virtual ICollection<TellingDag> TellingDagen { get; set; }
+        public virtual ICollection<Zwembad> Zwembaden { get; set; }
+        #endregion
+
+
+        #region Constructors
+
+        // initialize all the lists
+        public Medewerker()
+        {
+            Leertrajecten = new List<Leertraject>();
+            TellingDagen = new List<TellingDag>();
+            Zwembaden = new List<Zwembad>();
+        }
+        #endregion
+
+
+        #region Methods
+        // Lists all swimming groups of the logged in user
+        public IEnumerable<Leertraject> GetAllLeertrajecten()
+        {
+            return Leertrajecten.OrderBy(l => l.Titel).Select(l => l);
+        }
+
+        // Lists all swimming groups of the logged in user, but stores them in a selectList for use with the view.
+        public SelectList GetAllLeertrajectenSelectList()
+        {
+            return new SelectList(GetAllLeertrajecten(), "LeertrajectId", "Titel");
+        }
+
+        // Get a swimming group object from a swimming group ID 
+        public Leertraject GetLeertraject(int leertrajectId)
+        {
+            return Leertrajecten.FirstOrDefault(l => l.LeertrajectId == leertrajectId);
+        }
+
+        // Lists all swimmers 
+        public IEnumerable<Cursist> GetAllCursisten()
+        {
+            ICollection<Cursist> Cursisten = new List<Cursist>();
+
+            foreach (Leertraject leertraject in Leertrajecten)
+            {
+                foreach (Cursist cursist in leertraject.Cursisten)
+                {
+                    Cursisten.Add(cursist);
+                }
+            }
+            return Cursisten.OrderBy(c => c.Naam).ThenBy(c => c.Voornaam).Select(c => c);
+        }
+
+        // gets a cursist (swimmer) object from a cursistId
+        public Cursist GetCursist(int cursistId)
+        {
+            return GetAllCursisten().Where(c => c.CursistId == cursistId).FirstOrDefault();
+        }
+
+        // gets a list of swimmers based on their name. This is used in the search functionality.
+        public IEnumerable<Cursist> GetCursistenByName(string naam)
+        {
+            return
+                GetAllCursisten()
+                    .Where(
+                        c => c.Naam.ToLower().Contains(naam.ToLower()) || c.Voornaam.ToLower().Contains(naam.ToLower()))
+                    .OrderBy(c => c.Naam)
+                    .Select(c => c);
+        }
+
+        // gets a list of swimming groups based on its name. This is used in the search functionality.
+        public IEnumerable<Leertraject> GetLeertrajectFromName(string name)
+        {
+            return GetAllLeertrajecten().Where(l => l.Titel.ToLower().Contains(name.ToLower())).Select(l => l);
+        }
+
+        // gets the ID of a swimming group from (of) the ID of a swimmer
+        public int GetLeertrajectIdFromCursist(int cursistId)
+        {
+            int id = 0;
+            foreach (Leertraject leertraject in Leertrajecten)
+            {
+                foreach (Cursist cursist in leertraject.Cursisten)
+                {
+                    if (cursist.CursistId == cursistId)
+                    {
+                        id = leertraject.LeertrajectId;
+                    }
+                }
+            }
+            return id;
+        }
+
+        // gets the swimming group object from the ID of a swimmer
+        public Leertraject GetLeertrajectFromCursist(int cursistId)
+        {
+            Leertraject traject = new Leertraject();
+
+            foreach (Leertraject leertraject in Leertrajecten)
+            {
+                foreach (Cursist cursist in leertraject.Cursisten)
+                {
+                    if (cursist.CursistId == cursistId)
+                    {
+                        traject = GetLeertraject(leertraject.LeertrajectId);
+                    }
+                }
+            }
+            return traject;
+        }
+
+        // gets a list of days
+        public IEnumerable<TellingDag> GetTellingDagen()
+        {
+            return TellingDagen.OrderBy(t => t.Datum).Select(t => t);
+        }
+
+        // gets one such day object based on its ID
+        public TellingDag GetTellingDag(int tellingdagId)
+        {
+            return TellingDagen.FirstOrDefault(t => t.TellingDagId == tellingdagId);
+        }
+
+        // gets a list of all swimming pools
+        public IEnumerable<Zwembad> GetZwembaden()
+        {
+            return Zwembaden.OrderBy(z => z.Naam).Select(z => z);
+        }
+
+        // gets a swimming pool object from a swimming pool ID
+        public Zwembad GetZwembad(int zwembadId)
+        {
+            return Zwembaden.FirstOrDefault(z => z.ZwembadId == zwembadId);
+        }
+
+        #endregion
+    }
+}

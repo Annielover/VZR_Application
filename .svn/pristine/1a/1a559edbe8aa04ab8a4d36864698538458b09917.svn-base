@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TweedeZit.Cursist>
+
+
+<table>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Naam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Voornaam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Straat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Straatnummer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Postcode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gemeente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Geboortedatum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telefoon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Abonnement)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NaamMama)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NaamPapa)
+        </td>
+
+    </tr>
+}
+
+</table>

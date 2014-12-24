@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace TweedeZit.Models.Domain
+{
+    public class InProcServiceCache<TItem> : ServiceCache<TItem>
+    {
+        /// <summary>
+        /// Creates a new instance of this type.
+        /// </summary>
+        public InProcServiceCache()
+            : base()
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of this type, specifying a default cache lifetime.
+        /// </summary>
+        /// <param name="cacheLifetime">The length of time in which cache items are considered valid.</param>
+        public InProcServiceCache(TimeSpan cacheLifetime)
+            : base(cacheLifetime)
+        {
+        }
+
+        /// <summary>
+        /// Gets an enumeration of the currect things in cache.
+        /// </summary>
+        public override IEnumerable<ServiceCacheItem<TItem>> CachedItems
+        {
+            get { return cachedItems; }
+        } protected List<ServiceCacheItem<TItem>> cachedItems = new List<ServiceCacheItem<TItem>>();
+
+        /// <summary>
+        /// Adds an item to the cache.
+        /// </summary>
+        /// <param name="item">The item to add to the cache.</param>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null.</exception>
+        public override void AddToCache(ServiceCacheItem<TItem> item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item", "Argument \"item\" cannot be null.");
+
+            cachedItems.Add(item);
+        }
+
+        /// <summary>
+        /// Removes an item from the cache.
+        /// </summary>
+        /// <param name="item">The item to remove from the cache.</param>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null.</exception>
+        public override void RemoveFromCache(ServiceCacheItem<TItem> item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item", "Argument \"item\" cannot be null.");
+
+            cachedItems.Remove(item);
+        }
+
+        /// <summary>
+        /// Clears the cache of all items.
+        /// </summary>
+        public override void ClearCache()
+        {
+            cachedItems.Clear();
+        }
+    }
+}

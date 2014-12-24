@@ -1,0 +1,51 @@
+﻿using System;
+using System.Web;
+using System.Web.Services;
+using System.Web.Services.Protocols;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using TweedeZit.Infrastructure;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit
+{
+    public class TellingDag
+    {
+        #region Properties
+
+        public int TellingDagId { get; set; }
+
+        [Required(ErrorMessage = "{0} mag niet leeg zijn")]
+        public string Naam { get; set; }
+
+        [Required(ErrorMessage = "{0} mag niet leeg zijn")]
+        [DataType(DataType.Date)]
+        public DateTime Datum { get; set; }
+
+        #endregion
+
+        public virtual ICollection<Tijdvak> Tijdvakken { get; set; }
+
+        public TellingDag()
+        {
+            Tijdvakken = new List<Tijdvak>();
+        }
+
+        #region Methods
+
+        public IEnumerable<Tijdvak> GetTijdvakken()
+        {
+            return Tijdvakken.OrderBy(t => t.Van).Select(t => t);
+        }
+
+        public Tijdvak GetTijdvak(int tijdvakId)
+        {
+            return Tijdvakken.FirstOrDefault(t => t.TijdvakId == tijdvakId);
+        }
+
+        #endregion
+    }
+}

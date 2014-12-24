@@ -1,0 +1,86 @@
+﻿@model TweedeZit.Cursist
+
+@{
+    ViewBag.Title = "Zwemmer aanmaken";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("IndexZwemmers", "Aanwezigheid", new { id = @ViewData["leertraject"] })"><span class="badge badge-warning">Overzicht zwemmers</span></a> <span class="divider">/</span></li>
+    <li class="active">Nieuwe trainingsdag</li>
+</ul>
+
+<h3>Nieuwe @ViewBag.Message - zwemmer aanmaken</h3>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Gegevens van de zwemmer</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Voornaam)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Voornaam)
+            @Html.ValidationMessageFor(model => model.Voornaam)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Naam)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Naam)
+            @Html.ValidationMessageFor(model => model.Naam)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Straat)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Straat)
+            @Html.ValidationMessageFor(model => model.Straat)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Straatnummer)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Straatnummer)
+            @Html.ValidationMessageFor(model => model.Straatnummer)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Postcode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Postcode)
+            @Html.ValidationMessageFor(model => model.Postcode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Gemeente)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Gemeente)
+            @Html.ValidationMessageFor(model => model.Gemeente)
+        </div>
+
+        <p>
+            <input type="submit" class="btn btn-primary" value="Nieuw lid aanmaken" />
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

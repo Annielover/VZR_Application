@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Google Maps Directions";
+}
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
+
+<div id="googleMap" style="width:1000px;height:800px;"> </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var map;
+        var directionsDisplay;
+        var directionsService = new google.maps.DirectionsService();
+
+        function initialize() {
+
+            var Orig_Loc = @Html.Raw(Json.Encode(ViewData["address1"])); // Starting location 
+            var Dest_Loc = @Html.Raw(Json.Encode(ViewData["address2"])); // Destination Location
+
+            var request = {
+                origin: Orig_Loc,
+                destination: Dest_Loc,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            };
+
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                }
+            });
+
+            var mapProp = {
+                center: new google.maps.LatLng(20.593684, 78.96288), //India Lat and Lon
+                zoom: 2,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            directionsDisplay = new google.maps.DirectionsRenderer({
+                suppressMarkers: false
+            });
+
+
+
+            directionsDisplay.setMap(map);
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    });
+</script>
+    }

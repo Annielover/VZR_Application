@@ -1,0 +1,52 @@
+﻿@model TweedeZit.Models.Domain.Leertraject
+
+@{
+    ViewBag.Title = "Overzicht zwemmers";
+}
+
+<ul class="breadcrumb">
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+        <span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li>
+        <a href="@Url.Action("Index", "Aanwezigheid")">
+        <span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li class="active">Overzicht zwemmers</li>
+</ul>
+
+<h3>Overzicht @ViewBag.Message - zwemmers</h3>
+<p>(Gesorteerd op familienaam)</p>
+<p>&nbsp;</p>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GetCursisten().FirstOrDefault().Naam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetCursisten().FirstOrDefault().Voornaam)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.GetCursisten())
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Voornaam)
+            </td>
+            <td>
+                <a href="@Url.Action("ListAanwezigheden", new {leertrajectId = Model.LeertrajectId, cursistId = item.CursistId})">
+                    <span class="badge badge-info">Toon alle aanwezigheden</span></a>
+            </td>
+        </tr>
+    }
+
+</table>
+<p>&nbsp;</p>
+<p>
+    <a href="@Url.Action("CreateCursist", new {leertrajectId = Model.LeertrajectId})">
+        <span class="badge">Maak een nieuwe @ViewBag.Message - zwemmer aan ( ! NIEUW LID !)</span></a>
+</p>
+<p>&nbsp;</p>

@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="TweedeZit.Medewerker">
+    <Position X="0.5" Y="1.75" Width="3.25" />
+    <AssociationLine Name="TellingDagen" Type="TweedeZit.TellingDag">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-2.557" Y="0.654" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAgAGAgAIEAAACABCAAAAgBABAAAAQAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Medewerker.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Leertrajecten" />
+      <Property Name="TellingDagen" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TweedeZit.Opleidingsdag">
+    <Position X="14" Y="1.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAABAAAAAAAgAAA=</HashCode>
+      <FileName>Models\Domain\Opleidingsdag.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TweedeZit.Cursist">
+    <Position X="6" Y="6.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgACAAAAIAAAAAhAAAAACAAAAAAggAAAAAGAA=</HashCode>
+      <FileName>Models\Domain\Cursist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TweedeZit.Aanwezigheid">
+    <Position X="13.25" Y="5.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Models\Domain\Aanwezigheid.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Cursist" />
+      <Property Name="Dag" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TweedeZit.Models.Domain.Leertraject">
+    <Position X="6.5" Y="1.5" Width="4.5" />
+    <AssociationLine Name="Aanwezigheden" Type="TweedeZit.Aanwezigheid">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.432" Y="0.3" Height="0.182" Width="2.839" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AEIgIACAAAAgAEIAAAAABAAAAAAKAAAAAAEIIAAQAAI=</HashCode>
+      <FileName>Models\Domain\Leertraject.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Opleidingsdagen" />
+      <Property Name="Cursisten" />
+      <Property Name="Aanwezigheden" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TweedeZit.TellingDag">
+    <Position X="1.25" Y="6.5" Width="2.5" />
+    <AssociationLine Name="Tijdvakken" Type="TweedeZit.Tijdvak">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.037" Y="0.456" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAIAAAAABACAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\TellingDag.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tijdvakken" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TweedeZit.Tijdvak">
+    <Position X="1.5" Y="9.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Domain\Tijdvak.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

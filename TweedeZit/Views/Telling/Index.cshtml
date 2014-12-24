@@ -1,0 +1,113 @@
+﻿@model TweedeZit.Medewerker
+
+@{
+    ViewBag.Title = "Beheerspagina tellingen";
+}
+
+<ul class="breadcrumb">
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+        <span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li>
+        <a href="@Url.Action("Index", "Aanwezigheid")">
+        <span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li class="active">Beheerspagina tellingen</li>
+</ul>
+
+<h3>Overzicht aantal zwemmers per dag en per uur</h3>
+<p>(Gesorteerd op datum)</p>
+<p>&nbsp;</p>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GetTellingDagen().FirstOrDefault().Naam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetTellingDagen().FirstOrDefault().Datum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetTellingDagen().FirstOrDefault().GetTijdvakken().FirstOrDefault().Van)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetTellingDagen().FirstOrDefault().GetTijdvakken().FirstOrDefault().Tot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetTellingDagen().FirstOrDefault().GetTijdvakken().FirstOrDefault().AantalZwemmers)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetTellingDagen().FirstOrDefault().GetTijdvakken().FirstOrDefault().AantalBanen)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.GetTellingDagen())
+    {
+        int teller = 1;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Datum)
+            </td>
+
+            @foreach (var item2 in item.GetTijdvakken())
+            {
+                if (teller == 1)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item2.Van, "{0:HH:mm}")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item2.Tot, "{0:HH:mm}")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item2.AantalZwemmers)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item2.AantalBanen)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("EditTijdvak", "Telling", new {tellingDagId = item.TellingDagId, tijdvakId = item2.TijdvakId})">
+                            <span class="badge badge-info">Wijzig tijdspanne</span></a>
+                        <a href="@Url.Action("EditDag", "Telling", new {tellingDagId = item.TellingDagId})">
+                            <span class="badge badge-info">Wijzig dag</span></a>
+                        <a href="@Url.Action("CreateTijdvakId", "Telling", new {tellingDagId = item.TellingDagId})">
+                            <span class="badge badge-success">Maak nieuwe tijdspanne</span></a>
+                    </td>
+                    teller++;
+                }
+                else
+                {
+                    <tr >
+                        <td></td>
+                        <td></td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item2.Van, "{0:HH:mm}")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item2.Tot, "{0:HH:mm}")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item2.AantalZwemmers)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item2.AantalBanen)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("EditTijdvak", "Telling", new {tellingDagId = item.TellingDagId, tijdvakId = item2.TijdvakId})">
+                                <span class="badge badge-info">Wijzig tijdspanne</span></a>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tr>
+    }
+
+</table>
+<p>&nbsp;</p>
+<a href="@Url.Action("CreateTellingDag", "Telling")">
+    <span class="badge">Maak nieuwe dag aan</span></a>
+<p>&nbsp;</p>

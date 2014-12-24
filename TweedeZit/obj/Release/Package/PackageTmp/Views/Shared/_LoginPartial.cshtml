@@ -1,0 +1,17 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <text>
+    <!--<span class="label">Aangemeld als: @User.Identity.Name</span> //-->
+    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <a class="btn btn-danger" href="javascript:document.getElementById('logoutForm').submit()" rel="tooltip" title="Afmelden...">Afmelden</a>
+    }
+    </text>
+}
+else
+{
+    <ul>
+        <li><a class="btn btn-success" href="@Url.Action("Login", "Account")" rel="tooltip" title="Meld je aan!">Aanmelden</a></li>        
+    </ul>
+}

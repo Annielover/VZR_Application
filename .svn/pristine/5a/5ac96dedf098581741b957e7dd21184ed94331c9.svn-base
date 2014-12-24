@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+
+<hgroup class="title">
+    <h2>Contacteer ons</h2>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
+<h3>Via de telefoon</h3>
+<address>
+  <span class="label label-info">Telefoon</span> 0032 (0)9 216 73 30 <br />
+  <span class="label label-info">Fax</span> 0032 (0)9 216 73 39
+</address>
+
+<h3>Via ons contactformulier</h3>
+
+<form class="contact-us form-horizontal" method="post">
+		<legend>Vul je gegevens in</legend>		
+		<div class="control-group">
+	        <label class="control-label">Naam</label>
+			<div class="controls">
+			    <div class="input-prepend">
+				<span class="add-on"><i class="icon-user"></i></span>
+					<input type="text" class="input-xlarge" name="name" placeholder="Naam">
+				</div>
+			</div>
+		</div>
+     <div class="control-group">
+	        <label class="control-label">Voornaam</label>
+			<div class="controls">
+			    <div class="input-prepend">
+				<span class="add-on"><i class="icon-user"></i></span>
+					<input type="text" class="input-xlarge" name="name" placeholder="Voornaam">
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+	        <label class="control-label">E-mail adres</label>
+			<div class="controls">
+			    <div class="input-prepend">
+				<span class="add-on"><i class="icon-envelope"></i></span>
+					<input type="text" class="input-xlarge" name="email" placeholder="Email">
+				</div>
+			</div>	
+		</div>
+		<div class="control-group">
+	        <label class="control-label">Onderwerp</label>
+			<div class="controls">
+			    <div class="input-prepend">
+				<span class="add-on"><i class="icon-globe"></i></span>
+					<input type="text" id="url" class="input-xlarge" name="url" placeholder="Onderwerp">
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+	        <label class="control-label">Bericht</label>
+			<div class="controls">
+			    <div class="input-prepend">
+				<span class="add-on"><i class="icon-pencil"></i></span>
+					<textarea name="comment" class="span4" rows="4" cols="80" placeholder="Typ hier je bericht (Max 200 tekens)"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+		  <div class="controls">
+			<button type="submit" class="btn btn-primary">Verstuur</button>
+			<button type="button" class="btn">Annuleer</button>
+	      </div>	
+		</div>
+	  </form>
+
+<h3>Ons adres</h3>
+
+<address>
+  <span class="label label-info">Naam</span><strong> Vertrouwenscentrum Oost-Vlaanderen</strong><br />
+  <span class="label label-info">Straat</span> Brugsesteenweg 274 A<br />
+  <span class="label label-info">Locatie</span> 9000 GENT
+</address>
+ 

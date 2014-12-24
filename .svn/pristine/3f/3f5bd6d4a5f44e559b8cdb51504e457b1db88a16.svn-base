@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.Tests.Controllers
+{
+    class DummyDataContext
+    {
+        public Medewerker Medewerker1 { set; get; }
+
+        public DummyDataContext()
+        {
+            var leertraject1 = new Leertraject { LeertrajectId = 1, Titel = "Hoger Redder", Omschrijving = "Opleiding tot Hoger Redder"};
+            var medewerker1 = new Medewerker { Email = "marie.de.wilde@gmail.com", Naam = "De Wilde", Voornaam = "Marie" };
+            Medewerker1 = medewerker1;
+
+            DateTime start = DateTime.Now;
+
+            leertraject1.Add(new Opleidingsdag { OpleidingsdagId = 1, Naam = "dag 1", Date = start.AddDays(1) });
+            leertraject1.Add(new Opleidingsdag { OpleidingsdagId = 2, Naam = "dag 2", Date = start.AddDays(2) });
+            leertraject1.Add(new Opleidingsdag { OpleidingsdagId = 3, Naam = "dag 3", Date = start.AddDays(3) });
+            leertraject1.Add(new Opleidingsdag { OpleidingsdagId = 4, Naam = "dag 4", Date = start.AddDays(4) });
+            leertraject1.Add(new Opleidingsdag { OpleidingsdagId = 5, Naam = "dag 5", Date = start.AddDays(5) });
+            leertraject1.Add(new Cursist { CursistId = 1, Naam = "Bels", Voornaam = "Tine", Email = "tine.bels@hotmail.com" });
+            leertraject1.Add(new Cursist { CursistId = 2, Naam = "Serneels", Voornaam = "Kim", Email = "kim_serneels@gmail.com" });
+            leertraject1.Add(new Cursist { CursistId = 3, Naam = "Decoster", Voornaam = "Arne", Email = "arnedecoster@yahoo.co.uk" });
+
+            medewerker1.Leertrajecten.Add(leertraject1);
+        }
+    }
+}

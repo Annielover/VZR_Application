@@ -1,0 +1,56 @@
+﻿@model TweedeZit.Cursist
+
+@{
+    ViewBag.Title = "Verwijder zwemmer";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("IndexAllCursisten", "Aanwezigheid")"><span class="badge badge-warning">Beheer leden</span></a> <span class="divider">/</span></li>
+    <li class="active">Verwijder lid</li>
+</ul>
+
+<h3>Verwijder zwemmer</h3>
+
+<h4>Ben je zeker dat je deze zwemmer wilt verwijderen?</h4>
+
+<table class="table table-striped">
+    <tr>
+        <td>@Html.LabelFor(model => model.Voornaam)</td>
+        <td>@Html.DisplayFor(model => model.Voornaam)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(model => model.Naam)</td>
+        <td>@Html.DisplayFor(model => model.Naam)</td>
+    </tr>
+    <tr>
+        <td>Adres</td>
+        <td>@Html.DisplayFor(model => model.Straat) @Html.DisplayFor(model => model.Straatnummer), @Html.DisplayFor(model => model.Postcode) @Html.DisplayFor(model => model.Gemeente)</td>
+    </tr>
+     <tr>
+        <td>@Html.LabelFor(model => model.Email)</td>
+        <td>@Html.DisplayFor(model => model.Email)</td>
+    </tr>
+</table>
+@using (Html.BeginForm()) {
+    <p>
+        <br />
+        <input type="submit" value="Verwijder" class="btn btn-primary" />
+         <input type="button" class="btn" id="cancelButton" value="Annuleren" />
+    </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+     <script type="text/javascript">
+         $(document).ready(function () {
+
+             $('#cancelButton').click(function () {
+                 document.location = '@Url.Action("IndexAllCursisten", "Aanwezigheid")';
+            });
+        });
+    </script>
+
+}
+

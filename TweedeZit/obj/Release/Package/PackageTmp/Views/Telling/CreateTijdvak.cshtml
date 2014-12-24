@@ -1,0 +1,71 @@
+﻿@model TweedeZit.Tijdvak
+
+@{
+    ViewBag.Title = "Tijdvak aanmaken";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Telling")"><span class="badge badge-warning">Beheerspagina tellingen</span></a> <span class="divider">/</span></li>
+    <li class="active">Tijdvak aanmaken</li>
+</ul>
+
+<h3>Maak een nieuw tijdvak aan voor @ViewBag.Message</h3>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Tijdvak</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Van)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Van)
+            @Html.ValidationMessageFor(model => model.Van)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Tot)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Tot)
+            @Html.ValidationMessageFor(model => model.Tot)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AantalZwemmers)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AantalZwemmers)
+            @Html.ValidationMessageFor(model => model.AantalZwemmers)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AantalBanen)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AantalBanen)
+            @Html.ValidationMessageFor(model => model.AantalBanen)
+        </div>
+         
+        <p>
+            <input type="submit" value="Aanmaken" class="btn btn-primary"/>
+            <input type="button" class="btn" id="cancelButton" value="Annuleren" />
+        </p>
+    </fieldset>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+ <script type="text/javascript">
+         $(document).ready(function () {
+
+             $('#cancelButton').click(function () {
+                 document.location = '@Url.Action("Index", "Telling")';
+            });
+        });
+    </script>
+}

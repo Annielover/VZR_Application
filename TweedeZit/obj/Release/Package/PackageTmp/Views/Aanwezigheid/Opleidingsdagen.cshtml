@@ -1,0 +1,44 @@
+﻿@model TweedeZit.Models.Domain.Leertraject
+
+@{
+    ViewBag.Title = "Trainingsdagen";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li><a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge badge-warning">Zwemgroepen</span></a> <span class="divider">/</span></li>
+    <li class="active">Trainingsdagen</li>
+</ul>
+
+<h3>Overzicht trainingsdagen voor @ViewBag.Message</h3>
+<p>(Gesorteerd op datum)</p>
+<p>&nbsp;</p>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GetOpleidingsdagen().FirstOrDefault().Naam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetOpleidingsdagen().FirstOrDefault().Date)
+        </th>
+    </tr>
+
+@foreach (var item in Model.GetOpleidingsdagen()) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Naam)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            <a href="@Url.Action("Aanwezigheden", new { leertrajectId=Model.LeertrajectId, dagId=item.OpleidingsdagId })"><span class="badge badge-info">Wijzig aanwezigheden</span></a>
+            <a href="@Url.Action("EditOpleidingsdag", new { leertrajectId=Model.LeertrajectId, dagId=item.OpleidingsdagId })"><span class="badge badge-info">Wijzig dag</span></a>   
+        </td>
+    </tr>
+}
+
+</table>
+<a href="@Url.Action("CreateOpleidingsdag", "Aanwezigheid", new { leertrajectId = Model.LeertrajectId })"><span class="badge">Maak een nieuwe dag aan</span></a>
+<p>&nbsp;</p>
+

@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using TweedeZit.Infrastructure;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.Controllers
+{
+    [Authorize]
+    public class ZwembadController : Controller
+    {
+
+        private IMedewerkerRepository _medewerkerRepository;
+
+        public ZwembadController(IMedewerkerRepository medewerkerRepository)
+        {
+            this._medewerkerRepository = medewerkerRepository;
+        }
+
+        public ActionResult Index([ModelBinder(typeof(MedewerkerModelBinder))] Medewerker medewerker)
+        {
+            return View(medewerker);
+        }
+
+        public void GetWeather(String postalCode)
+        {
+            if (String.IsNullOrEmpty(postalCode))
+                throw new ArgumentException("Argument \"postalCode\" cannot be null or empty.", "postalCode");
+
+            String json = WeatherServiceProvider.GetWeather(postalCode);
+
+            Response.Write(json);
+        }
+
+        public ActionResult RenderMapDirections(String address1, String address2)
+        {
+            //address1 = "ColtonStreet 1445 Los Angeles";
+            //address2 = "19 Avenue 334 San Fransisco";
+            ViewData["address1"] = address1;
+            ViewData["address2"] = address2;
+            return View();
+        }
+
+    }
+}

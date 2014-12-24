@@ -1,0 +1,190 @@
+﻿@model TweedeZit.Medewerker
+
+@{
+    ViewBag.Title = "Overzicht zwembaden";
+}
+
+<ul class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home")"><span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li class="active">Overzicht zwembaden</li>
+</ul>
+
+<h3>Overzicht zwembaden</h3>
+<p>(Gesorteerd op naam)</p>
+<p>&nbsp;</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true) 
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GetZwembaden().FirstOrDefault().Naam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GetZwembaden().FirstOrDefault().Straat)
+        </th>
+        <th>
+             @Html.DisplayNameFor(model => model.GetZwembaden().FirstOrDefault().Straatnummer)
+        </th>
+        <th>
+              @Html.DisplayNameFor(model => model.GetZwembaden().FirstOrDefault().Postcode)
+        </th>
+        <th>
+              @Html.DisplayNameFor(model => model.GetZwembaden().FirstOrDefault().Gemeente)
+        </th>
+        <th>
+            Vertrek
+        </th>
+         <th>
+            Aankomst
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.GetZwembaden()) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Naam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Straat)
+        </td>  
+        <td>
+            @Html.DisplayFor(modelItem => item.Straatnummer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Postcode)
+        </td>  
+         <td>
+            @Html.DisplayFor(modelItem => item.Gemeente)
+        </td>
+        <td>
+            <input type="checkbox" name="vertrek" value="@item.ZwembadId" />
+        </td>
+        <td>
+            <input type="checkbox" name="aankomst" value="@item.ZwembadId" />
+        </td>
+       </tr>        
+}
+
+
+</table>
+    
+      <p>&nbsp;</p>
+    <p>
+        <input class="btn btn-primary" type="submit" value="Bereken route" />
+         <input type="button" class="btn" id="cancelButton" value="Annuleren" /> 
+    </p>
+}
+
+<p>&nbsp;</p>
+
+<h4>Weervoorspellingen</h4>
+<table class="table table-striped">
+    <tr>
+    <th>
+        Locatie
+    </th>
+    <th>
+        Weer
+    </th>
+    <th>
+        Weer in tekst
+    </th>
+    <th>
+        Wind
+    </th>
+</tr>
+    <tr>
+        <td><div id="geLocationName" style="display: inline;"></div></td>
+        <td><div id="geImage"></div></td>
+        <td><div id="geConditions"></div></td>
+        <td><div id="geWind"></div></td>
+    </tr>
+        <tr>
+        <td><div id="roLocationName" style="display: inline;"></div></td>
+        <td><div id="roImage"></div></td>
+        <td><div id="roConditions"></div></td>
+        <td><div id="roWind"></div></td>
+    </tr>
+    <tr>
+        <td><div id="stLocationName" style="display: inline;"></div></td>
+        <td><div id="stImage"></div></td>
+        <td><div id="stConditions"></div></td>
+        <td><div id="stWind"></div></td>
+    </tr>
+        <tr>
+        <td><div id="sdLocationName" style="display: inline;"></div></td>
+        <td><div id="sdImage"></div></td>
+        <td><div id="sdConditions"></div></td>
+        <td><div id="sdWind"></div></td>
+    </tr>
+        <tr>
+        <td><div id="lvLocationName" style="display: inline;"></div></td>
+        <td><div id="lvImage"></div></td>
+        <td><div id="lvConditions"></div></td>
+        <td><div id="lvWind"></div></td>
+    </tr>
+    
+</table>
+<p>&nbsp;</p>
+<div id="weatherError" style="color: red; font-weight: bold"></div>
+<h4>Laat hier een reactie na:</h4>
+<div id="fb-root"></div>
+<div class="fb-comments" data-href="http://www.ksoronse.be" data-numposts="5" data-colorscheme="light"></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getWeather("91101", "ge");
+            getWeather("90001", "ro");
+            getWeather("94102", "st");
+            getWeather("92037", "sd");
+            getWeather("89101", "lv");
+        });
+
+        function getWeather(postalCode, prefix) {
+            $.ajaxSetup({ cache: false });
+            $(document).ajaxError(function (e, jqxhr, settings, exception) {
+                $("#weatherError").html("Error returning weather data." + exception);
+            });
+
+            $("#" + prefix + "Conditions").html("Loading...");
+
+            $.ajax({
+                dataType: 'json',
+                url: '/Zwembad/GetWeather?postalCode=' + postalCode,
+                success: function (data) {
+                    $("#" + prefix + "Image").html("<a href='http://www.wunderground.com/US/" + postalCode + ".html' target='_blank' title='Click to see forecast.'><img src='" + data.current_observation.icon_url + "' /></a>");
+                    $("#" + prefix + "LocationName").html(data.current_observation.display_location.full);
+                    $("#" + prefix + "LocationName").attr("title", Math.round(data.current_observation.display_location.elevation) + "ft above sea level.");
+                    $("#" + prefix + "Conditions").html(data.current_observation.weather + " - <h5>" + Math.round(data.current_observation.temp_f) + "°F</h5> - " + data.current_observation.relative_humidity + " humidity");
+                    $("#" + prefix + "Wind").html(data.current_observation.wind_string);
+                    $("#" + prefix + "MapLink").attr("href", "https://maps.google.com/?q=" + data.current_observation.display_location.latitude + "," + data.current_observation.display_location.longitude);
+                },
+                error: function (exception) {
+                    $("#weatherError").html("Error returning weather data." + exception);
+                }
+            });
+        }
+
+        $('#cancelButton').click(function () {
+            document.location = '@Url.Action("Index", "Aanwezigheid")';
+        });
+
+    </script>
+    <script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/nl_NL/sdk.js#xfbml=1&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+}
+
+

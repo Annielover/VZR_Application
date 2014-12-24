@@ -1,0 +1,123 @@
+﻿@model IEnumerable<TweedeZit.Models.Domain.Leertraject>
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+@{
+    ViewBag.Title = "Overzicht trainingsgroepen";
+}
+<ul class="breadcrumb">
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+        <span class="badge badge-warning">Home</span></a> <span class="divider">/</span></li>
+    <li class="active">Zwemgroepen</li>
+</ul>
+<h3>Overzicht van alle trainingsgroepen</h3>
+
+@{
+    var error = (@ViewData["mededelingen"] as List<string>);
+    if (error.First() != "Geen items")
+    {
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert">×</a>
+            <h5 class="alert-heading">De volgende zaken hebben dringed je aandacht nodig</h5>
+            <table>
+                @foreach (var counter in (@ViewData["mededelingen"] as List<string>))
+                {
+                    <tr>
+                        <td>@counter</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+
+    var warning = (@ViewData["warnings"] as List<string>);
+    if (warning.First() != "Geen items")
+    {
+        <div class="alert alert-warning">
+            <a class="close" data-dismiss="alert">×</a>
+            <h5 class="alert-heading">De volgende zaken vereisen je aandacht</h5>
+            <table>
+                @foreach (var counter2 in (@ViewData["warnings"] as List<string>))
+                {
+                    <tr>
+                        <td>@counter2</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+}
+
+
+<p>&nbsp;</p>
+<p>
+    @using (Ajax.BeginForm("SearchZwemgroep", "Aanwezigheid",
+        new AjaxOptions
+        {
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "searchResult"
+        }))
+    {
+        @Html.TextBox("value")
+        <input type="submit" class="btn btn-primary" value="Zoek"/>
+        
+        // search functionality using AJAX. The form is submitted to the controller, and the results are written in a div.
+        // we make use of partial views
+    }
+</p>
+
+<div id="searchResult">
+
+    <table class="table table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Omschrijving)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Omschrijving)
+                </td>
+                <td>
+                    <a href="@Url.Action("Opleidingsdagen", new {id = item.LeertrajectId})">
+                        <span class="badge badge-info">Toon trainingsdagen</span></a>
+                    <a href="@Url.Action("IndexZwemmers", new {id = item.LeertrajectId})">
+                        <span class="badge badge-info">Toon zwemmers</span></a>
+                    <a href="@Url.Action("Edit", new {id = item.LeertrajectId})">
+                        <span class="badge badge-info">Wijzig groep</span></a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<p>
+    <a href="@Url.Action("Create")">
+        <span class="badge">Maak een nieuwe trainingsgroep aan</span></a>
+</p>
+<p>
+    <a href="@Url.Action("IndexAllCursisten")">
+        <span class="badge">Beheerspagina zwemmers</span></a>
+</p>
+<p>
+    <a href="@Url.Action("Index", "Telling")">
+        <span class="badge">Beheerspagina tellingen</span></a>
+</p>
+<p>
+    <a href="@Url.Action("Index", "Zwembad")">
+        <span class="badge">Zwembaden</span></a>
+</p>
+<p>&nbsp;</p>

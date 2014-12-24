@@ -1,0 +1,4 @@
+<Modules>
+  <Module PersistentId="942675BF-D9FD-4FA4-97FC-E291527D7BF1" ModuleId="TweedeZit" />
+  <Module PersistentId="E74C2F6C-D4D7-4E7C-AFAE-965927751C0D" ModuleId="TweedeZit.Tests" />
+</Modules>

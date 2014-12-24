@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Startpagina";
+}
+<ul class="breadcrumb">
+    <li class="active">Home</li>
+    </ul>
+
+    <div class="page-header">
+    <h3>Welkom op het aanwezigheidssysteem!</h3>
+        <p>Ga naar het overzicht van de <a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge">zwemgroepen</span></a></p>
+    </div>
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/nl_NL/sdk.js#xfbml=1&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<script src="https://apis.google.com/js/platform.js" async defer>
+  {lang: 'nl'}
+</script>
+
+<script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+
+
+<p>&nbsp;</p>
+<h4>Laatste nieuws:</h4>
+<iframe src="//player.vimeo.com/video/108831714" width="800" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="http://vimeo.com/108831714">VZR wint IMCP</a> from <a href="http://vimeo.com/vzr">Vrije Zwemmers Ronse</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+<p>&nbsp;</p>
+
+
+<h4>Laat vrijblijvend een reactie na...</h4>
+<div class="fb-comments" data-href="http://www.vzr.be" data-numposts="5" data-colorscheme="light"></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h4>Of deel onze website via onderstaande mogelijkheden:</h4>
+<table>
+    <tr>
+        <td>Facebook:</td><td><div class="fb-share-button" data-href="http://www.vzr.be" data-layout="button_count"></div></td>
+    </tr>
+    <tr>
+        <td>Google Plus:</td><td><div class="g-plus" data-action="share" data-annotation="bubble" data-height="24" data-href="http://www.vzr.be"></div></td>
+    </tr>
+    <tr>
+        <td>Twitter:</td><td><a href="https://twitter.com/share" class="twitter-share-button" data-text="Nice website!">Tweet</a></td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<h4>Als je deze website leuk vind, laat het weten:</h4>
+<div class="fb-like" data-href="http://www.vzr.be" data-layout="standard" data-action="like" data-show-faces="true" data-share="false"></div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>

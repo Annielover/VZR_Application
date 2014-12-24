@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.ViewModels
+{
+    public class EditViewModel
+    {
+        public SelectList Leertrajecten { get; set; }
+        public ICollection<Cursist> Cursisten { get; set; }
+        public Medewerker Medewerker { get; set; }
+        public int SelectedLeertrajectId { get; set; }
+
+        public EditViewModel(IEnumerable<Leertraject> leertrajecten, IEnumerable<Cursist> cursisten, Medewerker medewerker)
+        {
+            Leertrajecten = new SelectList(leertrajecten, "LeertrajectId", "Titel", medewerker.GetLeertrajectFromCursist(cursisten.Select(c => c.CursistId).FirstOrDefault()).Titel);
+            Cursisten = new List<Cursist>(cursisten.ToArray());
+            Medewerker = medewerker;
+        }
+    }
+
+    //public class CursistViewModel
+    //{
+    //    public int CursistId { get; set; }
+    //    public string Naam { get; set; } 
+    //    public string Voornaam { get; set; }
+    //    public int LeertrajectId { get; set; }
+    //    public string Titel { get; set; }
+    //}
+}

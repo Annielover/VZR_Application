@@ -1,0 +1,13 @@
+﻿@model TweedeZit.Models.Domain.Leertraject
+
+@{
+    ViewBag.Title = "Overzicht trainingsdagen";
+}
+
+<h2>Oeps,</h2>
+<h3>Er zijn helaas geen trainingsdagen voor deze groep...</h3>
+<p>&nbsp;</p>
+<a href="@Url.Action("CreateOpleidingsdag", "Aanwezigheid", new { leertrajectId = Model.LeertrajectId })"><span class="badge">Maak een nieuwe dag aan</span></a>
+<p>&nbsp;</p>
+<a href="@Url.Action("Index", "Aanwezigheid")"><span class="badge">Terug naar overzicht</span></a>
+<p>&nbsp;</p>

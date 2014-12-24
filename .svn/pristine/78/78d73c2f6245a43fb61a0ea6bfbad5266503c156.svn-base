@@ -1,0 +1,116 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using DotNetOpenAuth.Messaging;
+
+namespace TweedeZit.Models.Domain
+{
+    public class Leertraject
+    {
+        #region Properties
+
+        public virtual ICollection<Opleidingsdag> Opleidingsdagen { get; set; }
+        public virtual ICollection<Cursist> Cursisten { get; set; }
+        public virtual ICollection<Aanwezigheid> Aanwezigheden { get; set; }
+
+        public int LeertrajectId { get; set; }
+
+        [Required(ErrorMessage = "{0} mag niet leeg zijn")]
+        [Display(Name = "Zwemgroep")]
+        public string Titel { get; set; }
+
+        [Required(ErrorMessage = "{0} mag niet leeg zijn")]
+        public string Omschrijving { get; set; }
+
+        #endregion
+
+        public Leertraject()
+        {
+            Opleidingsdagen = new List<Opleidingsdag>();
+            Cursisten = new List<Cursist>();
+            Aanwezigheden = new List<Aanwezigheid>();
+        }
+
+        #region Methods
+
+        public IEnumerable<Opleidingsdag> GetOpleidingsdagen()
+        {
+            return Opleidingsdagen.OrderBy(o => o.Date).Select(o => o);
+        }
+
+        public void Add(Cursist cursist)
+        {
+            Cursisten.Add(cursist);
+            Aanwezigheden.AddRange(Opleidingsdagen.Select(dag => new Aanwezigheid(cursist, dag)));
+        }
+
+        public void Add(Opleidingsdag dag)
+        {
+            Opleidingsdagen.Add(dag);
+            Aanwezigheden.AddRange(Cursisten.Select(curcist => new Aanwezigheid(curcist, dag)));
+        }
+
+        public void Remove(Cursist cursist)
+        {
+            Cursisten.Remove(cursist);
+            foreach (Aanwezigheid aanwezigheid in Aanwezigheden.Where(a => a.Cursist == cursist).ToArray())
+            {
+                Aanwezigheden.Remove(aanwezigheid);
+            }
+        }
+
+        public void Remove(Opleidingsdag dag)
+        {
+            Opleidingsdagen.Remove(dag);
+            foreach (Aanwezigheid aanwezigheid in Aanwezigheden.Where(a => a.Dag == dag).ToArray())
+            {
+                Aanwezigheden.Remove(aanwezigheid);
+            }
+        }
+
+        public IEnumerable<Aanwezigheid> GetAanwezigheidslijst(Opleidingsdag dag)
+        {
+            return Aanwezigheden.Where(a => a.Dag == dag).OrderBy(a => a.Cursist.Naam).Select(a => a);
+        }
+
+        public IEnumerable<Aanwezigheid> GetAanwezigheidslijst(Cursist cursist)
+        {
+            return Aanwezigheden.Where(a => a.Cursist == cursist).Select(a => a);
+        }
+
+        public Opleidingsdag GetDag(int dagId)
+        {
+            return Opleidingsdagen.Where(d => d.OpleidingsdagId == dagId).FirstOrDefault();
+        }
+
+        public Cursist GetCursist(int cursistId)
+        {
+            return Cursisten.Where(c => c.CursistId == cursistId).FirstOrDefault();
+        }
+
+        public IEnumerable<Cursist> GetCursisten()
+        {
+            return Cursisten.OrderBy(c => c.Naam).ThenBy(c => c.Voornaam).Select(c => c);
+        }
+
+        public bool IsAanwezig(Cursist cursist, Opleidingsdag dag)
+        {
+            return Aanwezigheden.Single(a => a.Dag == dag && a.Cursist == cursist).Aanwezig;
+        }
+
+        public void SetAanwezig(Cursist cursist, Opleidingsdag dag)
+        {
+            Aanwezigheden.Single(a => a.Dag == dag && a.Cursist == cursist).Aanwezig = true;
+        }
+
+        public void SetAfwezig(Cursist cursist, Opleidingsdag dag)
+        {
+            Aanwezigheden.Single(a => a.Dag == dag && a.Cursist == cursist).Aanwezig = false;
+        }
+
+        #endregion
+
+        
+    }
+}

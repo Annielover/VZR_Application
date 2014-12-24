@@ -1,0 +1,162 @@
+﻿using System;
+using Moq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TweedeZit.Controllers;
+using TweedeZit.Models.Domain;
+using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+
+namespace TweedeZit.Tests.Controllers
+{
+    [TestClass]
+    public class AanwezigheidControllerTest
+    {
+        private AanwezigheidController _aanwezigheidController;
+        private Mock<IMedewerkerRepository> _medewerkerRepository;
+        private Medewerker _medewerker;
+
+        #region Setup
+
+        [TestInitialize]
+        public void SetupContext()
+        {
+            var context = new DummyDataContext();
+            _medewerkerRepository = new Mock<IMedewerkerRepository>();
+            _aanwezigheidController = new AanwezigheidController(_medewerkerRepository.Object);
+            _medewerkerRepository.Setup(s => s.Add(context.Medewerker1));
+            _medewerkerRepository.Setup(s => s.SaveChanges());
+            _medewerker = context.Medewerker1;
+        }
+
+        #endregion
+
+        #region Index
+
+        [TestMethod]
+        public void IndexWillShowLeertrajectenWhenNotNull()
+        {
+            var result = _aanwezigheidController.Index(_medewerker) as ViewResult;
+            Assert.IsNotNull(result);
+            var leertrajectResult = result.ViewData.Model as Leertraject;
+            Assert.AreEqual(1, _medewerker.GetAllLeertrajecten().Count());
+        }
+
+        [TestMethod]
+        public void IndexShowsLeertrajectenWhenNotNull()
+        {
+            var result = _aanwezigheidController.Index(_medewerker) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsTrue(String.IsNullOrEmpty(result.ViewName));
+        }
+
+        [TestMethod]
+        public void IndexWillShowViewNoLeertrajectenWhenNull()
+        {
+            var testMedewerker = new Medewerker();
+            var result = _aanwezigheidController.Index(testMedewerker) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("NoLeertrajecten", result.ViewName);
+        }
+
+        #endregion
+
+        #region Opleidingsdagen
+
+        [TestMethod]
+        public void OpleidingsdagenUsesConventionsWhenNotNull()
+        {
+            var result = _aanwezigheidController.Opleidingsdagen(_medewerker, 1) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsTrue(String.IsNullOrEmpty(result.ViewName));
+        }
+
+        [TestMethod]
+        public void OpleidingsdagenWillShowDagenWhenNotNull()
+        {
+            var result = _aanwezigheidController.Opleidingsdagen(_medewerker, 1) as ViewResult;
+            Assert.IsNotNull(result);
+            var opleidingsdagResult = result.ViewData.Model as Opleidingsdag;
+            Assert.AreEqual(5, _medewerker.GetLeertraject(1).GetOpleidingsdagen().Count());
+        }
+
+        [TestMethod]
+        public void OpleidingsdagenWillShowViewNoOpleidingsdagenWhenNull()
+        {
+            var testMedewerker = new Medewerker {MedewerkerId = 1};
+            var testleertraject = new Leertraject
+            {
+                LeertrajectId = 1,
+                Titel = "Hoger Redder",
+                Omschrijving = "Opleiding tot Hoger Redder"
+            };
+            testMedewerker.Leertrajecten.Add(testleertraject);
+            var result = _aanwezigheidController.Opleidingsdagen(testMedewerker, 1) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("NoOpleidingsdagen", result.ViewName);
+        }
+
+        #endregion
+
+        #region Aanwezigheden Get
+
+        [TestMethod]
+        public void AanwezighedenUsesConventionsWhenNotNull()
+        {
+            var result = _aanwezigheidController.Aanwezigheden(_medewerker, 1, 1) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.IsTrue(String.IsNullOrEmpty(result.ViewName));
+        }
+
+        [TestMethod]
+        public void AanwezighedenWillShowAanwezighedenWhenNotNull()
+        {
+            const int dagId = 1;
+            const int leertrajectId = 1;
+            var dag = _medewerker.GetLeertraject(leertrajectId).GetDag(dagId);
+            var result = _aanwezigheidController.Aanwezigheden(_medewerker, leertrajectId, dagId) as ViewResult;
+            Assert.IsNotNull(result);
+            var aanwezigheidResult = result.ViewData.Model as Aanwezigheid;
+            Assert.AreEqual(3, _medewerker.GetLeertraject(leertrajectId).GetAanwezigheidslijst(dag).Count());
+        }
+
+        #endregion
+
+        #region Aanwezigheden Post
+
+        [TestMethod]
+        public void OpslaanMustSaveChangesToAanwezigheden()
+        {
+            const int dagId = 1;
+            const int leertrajectId = 1;
+            var formValues = new FormCollection()
+            {
+                {"item.Aanwezig", "true,false,false,false"}
+            };
+            var result =
+                _aanwezigheidController.Aanwezigheden(_medewerker, leertrajectId, dagId, formValues) as ViewResult;
+            _medewerkerRepository.Verify(s => s.SaveChanges(), Times.Once());
+        }
+
+        [TestMethod]
+        public void OpslaanMustRedirectToOpleidingsdagenWithMessage()
+        {
+            const int dagId = 1;
+            const int leertrajectId = 1;
+            var formValues = new FormCollection()
+            {
+                {"item.Aanwezig", "true,false,true,false,true,false"}
+            };
+            var result =
+                _aanwezigheidController.Aanwezigheden(_medewerker, leertrajectId, dagId, formValues) as
+                    RedirectToRouteResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Opleidingsdagen", result.RouteValues["action"]);
+            Assert.IsTrue(_aanwezigheidController.TempData.ContainsKey("Msg"));
+        }
+
+        #endregion
+    }
+}

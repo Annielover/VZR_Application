@@ -1,0 +1,303 @@
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using TweedeZit.Models.Domain;
+
+namespace TweedeZit.Models.DAL
+{
+    [ExcludeFromCodeCoverage]
+    public class AanwezigheidsInitializer : CreateDatabaseIfNotExists<AanwezigheidsContext>
+    {
+        protected override void Seed(AanwezigheidsContext context)
+        {
+            try
+            {
+                var dinsdag = new DateTime(2013, 09, 17);
+                var woensdag = new DateTime(2013, 09, 18);
+                var vrijdag = new DateTime(2013, 09, 20);
+                var zaterdag = new DateTime(2013, 09, 21);
+                var abonnement = new DateTime(2014, 12, 31);
+                var geboren = new DateTime(1990, 05, 12);
+
+                var tijdvak12 = new TimeSpan(12, 00, 00);
+                var tijdvak13 = new TimeSpan(13, 00, 00);
+                var tijdvak14 = new TimeSpan(14, 00, 00);
+                var tijdvak18 = new TimeSpan(18, 00, 00);
+                var tijdvak19 = new TimeSpan(19, 00, 00);
+                var tijdvak20 = new TimeSpan(20, 00, 00);
+                var tijdvak21 = new TimeSpan(21, 00, 00);
+                var tijdvak2130 = new TimeSpan(21, 30, 00);                
+
+                var medewerker1 = new Medewerker
+                {
+                    Email = "laurent.de.wilde@gmail.com",
+                    Naam = "De Wilde",
+                    Voornaam = "Laurent"
+                };               
+
+                var leertraject1 = new Leertraject
+                {
+                    Titel = "Precompetitie",
+                    Omschrijving = "Zwemschool grijs",
+                };
+
+                var leertraject2 = new Leertraject
+                {
+                    Titel = "Competitie",
+                    Omschrijving = "Wedstrijdzwemmers",
+                };
+
+                var leertraject3 = new Leertraject
+                {
+                    Titel = "Masters",
+                    Omschrijving = "Masterzwemmers",
+                };
+
+                var leertraject4 = new Leertraject
+                {
+                    Titel = "Zwemschool Zwart 1",
+                    Omschrijving = "Zwemschool zwart 1",
+                };
+
+                var leertraject5 = new Leertraject
+                {
+                    Titel = "Zwemschool Zwart 2",
+                    Omschrijving = "Zwemschool zwart 2",
+                };
+
+                var leertraject6 = new Leertraject
+                {
+                    Titel = "Zwemschool Rood",
+                    Omschrijving = "Rode badmuts",
+                };
+
+                var leertraject7 = new Leertraject
+                {
+                    Titel = "Zwemschool Blauw",
+                    Omschrijving = "Blauwe badmuts",
+                };
+
+                var leertraject8 = new Leertraject
+                {
+                    Titel = "Trainers",
+                    Omschrijving = "Onze trainers",
+                };
+
+                leertraject1.Add(new Opleidingsdag {Naam = "Dinsdag", Date = dinsdag});
+                leertraject1.Add(new Opleidingsdag {Naam = "Woensdag", Date = woensdag});
+                leertraject1.Add(new Opleidingsdag {Naam = "Vrijdag", Date = vrijdag});
+                leertraject1.Add(new Opleidingsdag {Naam = "Zaterdag", Date = zaterdag});
+
+                leertraject2.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject2.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject2.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject2.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject3.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject3.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject3.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject3.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject4.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject4.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject4.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject4.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject5.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject5.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject5.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject5.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject6.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject6.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject6.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject6.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject7.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject7.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject7.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject7.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject8.Add(new Opleidingsdag { Naam = "Dinsdag", Date = dinsdag });
+                leertraject8.Add(new Opleidingsdag { Naam = "Woensdag", Date = woensdag });
+                leertraject8.Add(new Opleidingsdag { Naam = "Vrijdag", Date = vrijdag });
+                leertraject8.Add(new Opleidingsdag { Naam = "Zaterdag", Date = zaterdag });
+
+                leertraject1.Add(new Cursist { Naam = "Test", Voornaam = "Bram", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject1.Add(new Cursist { Naam = "Test", Voornaam = "Marion", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject1.Add(new Cursist { Naam = "Test", Voornaam = "Hélène", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject1.Add(new Cursist { Naam = "Test", Voornaam = "Julie", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject1.Add(new Cursist { Naam = "Test", Voornaam = "Emma", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Hendrik", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Elise", Email = "test@hotmail.comm", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Nele", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Jorinde", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Kevin", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Emelie", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Liesje", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject2.Add(new Cursist { Naam = "Test", Voornaam = "Silke", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+
+                leertraject3.Add(new Cursist { Naam = "Test", Voornaam = "Hans", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject3.Add(new Cursist { Naam = "Test", Voornaam = "Wendy", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject3.Add(new Cursist { Naam = "Test", Voornaam = "Thierry", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject3.Add(new Cursist { Naam = "Test", Voornaam = "Xerxes", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject3.Add(new Cursist { Naam = "Test", Voornaam = "Joran", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject3.Add(new Cursist { Naam = "Test", Voornaam = "Quentin", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject3.Add(new Cursist { Naam = "Bauwens", Voornaam = "Chloë", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+
+                leertraject4.Add(new Cursist { Naam = "Test", Voornaam = "Jouri", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject4.Add(new Cursist { Naam = "Test", Voornaam = "Amell", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject4.Add(new Cursist { Naam = "Gabriels", Voornaam = "Kaat", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject4.Add(new Cursist { Naam = "Desloovere", Voornaam = "Dora", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject4.Add(new Cursist { Naam = "Test", Voornaam = "Esta", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject4.Add(new Cursist { Naam = "Test", Voornaam = "Landrik", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject4.Add(new Cursist { Naam = "Tet", Voornaam = "Jannis", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+
+                leertraject5.Add(new Cursist { Naam = "Test", Voornaam = "Ilian", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject5.Add(new Cursist { Naam = "Test", Voornaam = "Greet", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject5.Add(new Cursist { Naam = "Test", Voornaam = "Ines", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject5.Add(new Cursist { Naam = "Test", Voornaam = "Aaron", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject5.Add(new Cursist { Naam = "Test", Voornaam = "Ethan", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+
+                leertraject6.Add(new Cursist { Naam = "Rommelare", Voornaam = "Tristan", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject6.Add(new Cursist { Naam = "Vaillant", Voornaam = "Noémie", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject6.Add(new Cursist { Naam = "Test", Voornaam = "Ilias", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject6.Add(new Cursist { Naam = "Gabriels", Voornaam = "Ruben", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject6.Add(new Cursist { Naam = "Test", Voornaam = "Tobias", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject6.Add(new Cursist { Naam = "Test", Voornaam = "Tim", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject6.Add(new Cursist { Naam = "Test", Voornaam = "Vin", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Liam", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Desloovere", Voornaam = "Octaaf", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Sibe", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Caius", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Jannes", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Briek", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Nina", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Vaillant", Voornaam = "Thomas", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+                leertraject7.Add(new Cursist { Naam = "Test", Voornaam = "Renaud", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "Tania Dexters", NaamPapa = "Elton John" });
+
+                leertraject8.Add(new Cursist { Naam = "Mattelin", Voornaam = "Marie-Aline", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Gustave Royerslaan", Straatnummer = "73", Telefoon = "055/21.26.73", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject8.Add(new Cursist { Naam = "De Wilde", Voornaam = "Laurent", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Wijnstraat", Straatnummer = "12", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject8.Add(new Cursist { Naam = "Cotton", Voornaam = "Sophie", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject8.Add(new Cursist { Naam = "Dejaegher", Voornaam = "Stéphanie", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject8.Add(new Cursist { Naam = "De Bleeker", Voornaam = "Muriel", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+                leertraject8.Add(new Cursist { Naam = "Viville", Voornaam = "Lynn", Email = "test@hotmail.com", Gemeente = "Ronse", Postcode = 9600, Straat = "Teststraat", Straatnummer = "123A", Telefoon = "055/21.22.23", Abonnement = abonnement, Geboortedatum = geboren, NaamMama = "", NaamPapa = "" });
+
+                medewerker1.Leertrajecten.Add(leertraject1);
+                medewerker1.Leertrajecten.Add(leertraject2);
+                medewerker1.Leertrajecten.Add(leertraject3);
+                medewerker1.Leertrajecten.Add(leertraject4);
+                medewerker1.Leertrajecten.Add(leertraject5);
+                medewerker1.Leertrajecten.Add(leertraject6);
+                medewerker1.Leertrajecten.Add(leertraject7);
+                medewerker1.Leertrajecten.Add(leertraject8);
+
+               
+
+                Tijdvak dinsdagVak1 = new Tijdvak();
+                dinsdagVak1.DagNaam = "Dinsdag";
+                dinsdagVak1.Van = tijdvak18;
+                dinsdagVak1.Tot = tijdvak19;
+                dinsdagVak1.AantalZwemmers = 15;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak dinsdagVak2 = new Tijdvak();
+                dinsdagVak1.DagNaam = "Dinsdag";
+                dinsdagVak1.Van = tijdvak19;
+                dinsdagVak1.Tot = tijdvak20;
+                dinsdagVak1.AantalZwemmers = 16;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak dinsdagVak3 = new Tijdvak();
+                dinsdagVak1.DagNaam = "Dinsdag";
+                dinsdagVak1.Van = tijdvak20;
+                dinsdagVak1.Tot = tijdvak2130;
+                dinsdagVak1.AantalZwemmers = 18;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak woensdagVak1 = new Tijdvak();
+                woensdagVak1.DagNaam = "Woensdag";
+                woensdagVak1.Van = tijdvak20;
+                woensdagVak1.Tot = tijdvak21;
+                woensdagVak1.AantalZwemmers = 3;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak vrijdagVak1 = new Tijdvak();
+                vrijdagVak1.DagNaam = "Vrijdag";
+                vrijdagVak1.Van = tijdvak19;
+                vrijdagVak1.Tot = tijdvak20;
+                vrijdagVak1.AantalZwemmers = 1;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak vrijdagVak2 = new Tijdvak();
+                vrijdagVak1.DagNaam = "Vrijdag";
+                vrijdagVak1.Van = tijdvak20;
+                vrijdagVak1.Tot = tijdvak2130;
+                vrijdagVak1.AantalZwemmers = 15;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak zaterdagVak1 = new Tijdvak();
+                vrijdagVak1.DagNaam = "Zaterdag";
+                vrijdagVak1.Van = tijdvak12;
+                vrijdagVak1.Tot = tijdvak13;
+                vrijdagVak1.AantalZwemmers = 19;
+                dinsdagVak1.AantalBanen = 6;
+
+                Tijdvak zaterdagVak2 = new Tijdvak();
+                vrijdagVak1.DagNaam = "Zaterdag";
+                vrijdagVak1.Van = tijdvak13;
+                vrijdagVak1.Tot = tijdvak14;
+                vrijdagVak1.AantalZwemmers = 5;
+                dinsdagVak1.AantalBanen = 6;
+
+                TellingDag tellingDinsdag = new TellingDag { Naam = "Dinsdag", Datum = dinsdag };
+                TellingDag tellingWoensdag = new TellingDag { Naam = "Woensdag", Datum = woensdag };
+                TellingDag tellingVrijdag = new TellingDag { Naam = "Vrijdag", Datum = vrijdag };
+                TellingDag tellingZaterdag = new TellingDag { Naam = "Zaterdag", Datum = zaterdag };
+
+                TellingDag tellingDinsdag2 = new TellingDag { Naam = "Dinsdag", Datum = dinsdag.AddDays(7) };
+                TellingDag tellingWoensdag2 = new TellingDag { Naam = "Woensdag", Datum = woensdag.AddDays(7) };
+                TellingDag tellingVrijdag2 = new TellingDag { Naam = "Vrijdag", Datum = vrijdag.AddDays(7) };
+                TellingDag tellingZaterdag2 = new TellingDag { Naam = "Zaterdag", Datum = zaterdag.AddDays(7) }; 
+
+                tellingDinsdag.Tijdvakken.Add(dinsdagVak1);
+                tellingDinsdag.Tijdvakken.Add(dinsdagVak2);
+                tellingDinsdag.Tijdvakken.Add(dinsdagVak3);
+                tellingWoensdag.Tijdvakken.Add(woensdagVak1);
+                tellingVrijdag.Tijdvakken.Add(vrijdagVak1);
+                tellingVrijdag.Tijdvakken.Add(vrijdagVak2);
+                tellingZaterdag.Tijdvakken.Add(zaterdagVak1);
+                tellingZaterdag.Tijdvakken.Add(zaterdagVak2);
+
+
+                medewerker1.TellingDagen.Add(tellingDinsdag);
+                medewerker1.TellingDagen.Add(tellingWoensdag);
+                medewerker1.TellingDagen.Add(tellingVrijdag);
+                medewerker1.TellingDagen.Add(tellingZaterdag);
+                medewerker1.TellingDagen.Add(tellingDinsdag2);
+                medewerker1.TellingDagen.Add(tellingWoensdag2);
+                medewerker1.TellingDagen.Add(tellingVrijdag2);
+                medewerker1.TellingDagen.Add(tellingZaterdag2);
+
+                context.Medewerkers.Add(medewerker1);
+
+                context.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                string s = "Fout creatie database ";
+                foreach (DbEntityValidationResult eve in e.EntityValidationErrors)
+                {
+                    s += String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.GetValidationResult());
+                    s = eve.ValidationErrors.Aggregate(s, (current, ve) => current + String.Format("- Property: \"{0}\", Error: \"{1}\"", ve.PropertyName, ve.ErrorMessage));
+                }
+                throw new Exception(s);
+            }
+        }
+    }
+}
